@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Лабиринт: найди выход</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1020;--panel:#111c30;--line:#283a55;--text:#edf4ff;--muted:#9fb0c8;--blue:#3291ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:900px;margin:auto;padding:16px}h1{font-size:clamp(24px,5vw,34px);margin:0 0 4px}.muted{color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px}
+canvas{width:100%;height:auto;display:block;border-radius:10px;touch-action:none;background:#f4f7fb;cursor:crosshair}
+button,select{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#1b2b44;color:var(--text);font:inherit;margin-top:8px}
+button{cursor:pointer;background:var(--blue);border-color:var(--blue);font-weight:700}.secondary{background:#1b2b44;border-color:var(--line)}
+.side{display:grid;gap:12px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.stat{background:#0b1526;border-radius:10px;padding:10px}.stat small{display:block;color:var(--muted)}.stat b{font-size:19px}
+#status{min-height:42px;margin-top:10px;color:#9be7ad}.legend{display:grid;gap:7px;color:var(--muted);font-size:13px;margin-top:8px}.swatch{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:7px}
+@media(max-width:700px){main{padding:10px}.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.side .card:first-child{grid-column:1/-1}}
+</style>
+</head>
+<body><main>
+<h1>🧩 Найди единственный путь</h1>
+<p class="muted">Проводи пальцем или мышкой по проходу либо двигайся по клеткам кнопками. Найди финиш без подсказки!</p>
+<div class="layout">
+<section class="card"><canvas id="game" width="600" height="600"></canvas>
+<p class="muted" style="font-size:12px;margin:9px 2px 0">На телефоне удерживай палец и веди по соседним клеткам. На компьютере зажми левую кнопку мыши. Также можно нажимать на соседнюю клетку или использовать стрелки клавиатуры.</p></section>
+<aside class="side">
+<section class="card">
+<label for="size" class="muted">Сложность</label><select id="size"><option value="10">Лёгкая · 10 × 10</option><option value="16" selected>Средняя · 16 × 16</option><option value="24">Сложная · 24 × 24</option></select>
+<button id="new">Новый лабиринт</button><button id="restart" class="secondary">Начать заново</button>
+<div id="status">Найди путь от зелёного старта к красному финишу.</div>
+<div class="stats"><div class="stat"><small>Шаги</small><b id="steps">0</b></div><div class="stat"><small>Время</small><b id="time">0 с</b></div></div>
+</section>
+<section class="card"><b>Управление</b><div class="legend">
+<div>🟢 Старт</div><div>🔴 Финиш</div><div><span class="swatch" style="background:#2792ff"></span>Твой след</div><div><span class="swatch" style="background:#263449"></span>Стена</div><div><span class="swatch" style="background:#fff"></span>Проход</div>
+</div><p class="muted" style="font-size:12px">Стены нельзя пересекать. Можно возвращаться по уже пройденным клеткам.</p></section>
+</aside></div></main>
+<script>
+(()=>{
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+let n=16,grid=[],start=[0,0],goal=[15,15],player=[0,0],visited=new Set(),steps=0,won=false,dragging=false,startTime=Date.now(),timer=null;
+const k=(x,y)=>x+','+y;
+function generate(size){
+ n=size; grid=Array.from({length:n},()=>Array(n).fill(1));
+ // Randomized depth-first maze carving guarantees a connected maze with a unique route.
+ const odd=(v)=>v%2===1?v:v-1;
+ const sx=0,sy=0, ex=n-1,ey=n-1;
+ // Use cell-based DFS then expand each maze cell into a 2x2-ish grid.
+ const cw=Math.floor((n+1)/2),ch=Math.floor((n+1)/2);
+ const seen=new Set(), stack=[[0,0]]; grid[0][0]=0;
+ seen.add('0,0');
+ while(stack.length){
+  const [cx,cy]=stack[stack.length-1];
+  const opts=[[cx+1,cy],[cx-1,cy],[cx,cy+1],[cx,cy-1]].filter(([x,y])=>x>=0&&y>=0&&x<cw&&y<ch&&!seen.has(k(x,y)));
+  if(!opts.length){stack.pop();continue;}
+  const [nx,ny]=opts[Math.floor(Math.random()*opts.length)];
+  const x1=cx*2,y1=cy*2,x2=nx*2,y2=ny*2;
+  if(x2<n&&y2<n)grid[y2][x2]=0;
+  grid[Math.floor((y1+y2)/2)][Math.floor((x1+x2)/2)]=0;
+  seen.add(k(nx,ny));stack.push([nx,ny]);
+ }
+ // Ensure the endpoint at bottom-right is connected via a carved tail.
+ const gx=n-1,gy=n-1; grid[gy][gx]=0;
+ let x=gx,y=gy;
+ while(x>Math.floor((n-1)/2)*2){x--;grid[y][x]=0;}
+ while(y>Math.floor((n-1)/2)*2){y--;grid[y][x]=0;}
+ // DFS-generated tree with a single corridor route; start/end coordinates are fixed.
+ start=[0,0];goal=[n-1,n-1];
+ // Connect the bottom-right endpoint to the generated maze's final even/even cell.
+ let px=n-1,py=n-1;
+ if(n%2===0){grid[py][px]=0;grid[py][px-1]=0;grid[py-1][px-1]=0;grid[py-1][px]=0;}
+ resetPlayer();draw();
+}
+function resetPlayer(){player=[...start];visited=new Set([k(...player)]);steps=0;won=false;startTime=Date.now();document.getElementById('steps').textContent='0';document.getElementById('time').textContent='0 с';document.getElementById('status').textContent='Найди путь от зелёного старта к красному финишу.';document.getElementById('status').style.color='#9be7ad';draw();}
+function draw(){
+ const size=canvas.width/n;ctx.clearRect(0,0,canvas.width,canvas.height);
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+  ctx.fillStyle=grid[y][x]?'#263449':'#f4f7fb';ctx.fillRect(x*size,y*size,size,size);
+  ctx.strokeStyle='#d5deea';ctx.lineWidth=.6;ctx.strokeRect(x*size,y*size,size,size);
+  if(visited.has(k(x,y))&&!grid[y][x]){ctx.fillStyle='#72b7ff';ctx.fillRect(x*size+size*.18,y*size+size*.18,size*.64,size*.64);}
+ }
+ [[start,'#22c55e','S'],[goal,'#ef4444','F']].forEach(([p,c,t])=>{ctx.beginPath();ctx.arc((p[0]+.5)*size,(p[1]+.5)*size,size*.32,0,Math.PI*2);ctx.fillStyle=c;ctx.fill();ctx.fillStyle='#fff';ctx.font=`bold ${Math.max(10,size*.35)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t,(p[0]+.5)*size,(p[1]+.5)*size);});
+ if(!won){ctx.beginPath();ctx.arc((player[0]+.5)*size,(player[1]+.5)*size,size*.22,0,Math.PI*2);ctx.fillStyle='#075fc7';ctx.fill();}
+}
+function move(x,y){
+ if(won)return;
+ if(x<0||y<0||x>=n||y>=n)return;
+ const [px,py]=player;
+ if(Math.abs(x-px)+Math.abs(y-py)!==1)return;
+ if(grid[y][x]){document.getElementById('status').textContent='Там стена! Ищи проход.';return;}
+ player=[x,y];steps++;visited.add(k(x,y));document.getElementById('steps').textContent=steps;document.getElementById('time').textContent=Math.floor((Date.now()-startTime)/1000)+' с';
+ if(x===goal[0]&&y===goal[1]){won=true;document.getElementById('status').textContent='🎉 Победа! Ты нашёл выход!';document.getElementById('status').style.color='#8ee6a0';}
+ draw();
+}
+function cellAt(e){const r=canvas.getBoundingClientRect();return [Math.floor((e.clientX-r.left)*canvas.width/r.width/(canvas.width/n)),Math.floor((e.clientY-r.top)*canvas.height/r.height/(canvas.height/n))];}
+function tryMoveTo(x,y){if(x===player[0]&&y===player[1])return;move(x,y);}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();canvas.setPointerCapture(e.pointerId);dragging=true;const [x,y]=cellAt(e);tryMoveTo(x,y);});
+canvas.addEventListener('pointermove',e=>{if(!dragging)return;const [x,y]=cellAt(e);tryMoveTo(x,y);});
+canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
+canvas.addEventListener('click',e=>{if(dragging)return;const [x,y]=cellAt(e);if(Math.abs(x-player[0])+Math.abs(y-player[1])===1)move(x,y);});
+document.addEventListener('keydown',e=>{const d={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(d){e.preventDefault();move(player[0]+d[0],player[1]+d[1]);}});
+document.getElementById('new').addEventListener('click',()=>generate(Number(document.getElementById('size').value)));
+document.getElementById('restart').addEventListener('click',resetPlayer);
+generate(n);
+setInterval(()=>{if(!won){document.getElementById('time').textContent=Math.floor((Date.now()-startTime)/1000)+' с';}},1000);
+})();
+</script></body></html>
