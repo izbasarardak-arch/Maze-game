@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover">
+<meta name="theme-color" content="#0a1020">
+<meta name="description" content="Maze Game: лабиринт и уклонение. Пройди уровни, зарабатывай очки и избегай препятствий.">
+<title>Maze Game: Лабиринт, Уклонение и Квиззи</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1020;--panel:#111c30;--line:#2b3d5b;--text:#edf4ff;--muted:#9fb0ca;--blue:#55a8ff;--green:#43e59a;--red:#ff647c;--gold:#ffd166}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg);overscroll-behavior-y:contain}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#142342 0,#0a1020 55%);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:#1a2a45;border-radius:12px;padding:10px 14px;touch-action:manipulation}button:hover{filter:brightness(1.12)}button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}.app{width:min(1120px,100%);margin:0 auto;padding:16px 14px 24px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}.brand h1{font-size:clamp(22px,4vw,32px);line-height:1.1;margin:0 0 4px}.brand p{margin:0;color:var(--muted);font-size:13px}.stats{display:flex;gap:8px;flex-wrap:wrap}.stat{background:#111c30;border:1px solid var(--line);padding:8px 12px;border-radius:12px;min-width:90px}.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:18px}.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{flex:1;font-weight:700}.tabs button.active{background:#1b4b7d;border-color:#438fe0;box-shadow:0 0 0 1px #438fe033 inset}.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:12px;align-items:start}.panel{background:linear-gradient(160deg,#111c30,#0e182a);border:1px solid var(--line);border-radius:16px;padding:13px;min-width:0;box-shadow:0 10px 30px #0002}.panel h2,.panel h3{margin:0 0 9px}.panel h2{font-size:18px}.panel h3{font-size:15px}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.row.spread{justify-content:space-between}.muted{color:var(--muted)}.tiny{font-size:12px}.level-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}.level{padding:9px 5px;text-align:center;border-radius:10px;font-size:12px}.level.selected{border-color:var(--blue);background:#17395d}.level .n{display:block;font-size:15px;font-weight:800}.maze-wrap{position:relative;width:100%;margin:10px auto 0;overflow:auto;border-radius:12px;background:#0b1425;border:1px solid #314767;touch-action:pan-y pinch-zoom;overscroll-behavior:contain;max-height:68vh}.maze-wrap canvas{display:block;width:100%;height:auto;max-height:68vh;object-fit:contain;outline:none;touch-action:none}.hint{margin:9px 0 0;color:var(--muted);font-size:12px}.primary{background:#1769aa;border-color:#3a9ae9;font-weight:750}.danger{background:#47202d;border-color:#79384b}.good{color:var(--green)}.gold{color:var(--gold)}.side{display:flex;flex-direction:column;gap:12px}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{background:#0d1728;border:1px solid #253752;border-radius:12px;padding:10px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:19px}.dodge-wrap{position:relative;margin-top:10px;border:1px solid #314767;border-radius:12px;overflow:auto;background:#0b1425;overscroll-behavior:contain;touch-action:pan-y pinch-zoom;max-height:68vh}.dodge-stage{position:relative;width:100%;min-width:280px;touch-action:none}.dodge-wrap canvas{display:block;width:100%;height:auto;aspect-ratio:560/600;touch-action:none}.dodge-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;background:#07101dbb;backdrop-filter:blur(3px)}.dodge-overlay.hidden{display:none}.overlay-card{max-width:340px;background:#111c30eF;border:1px solid #365071;border-radius:16px;padding:20px;box-shadow:0 15px 50px #0008}.overlay-card h2{font-size:24px;margin:0 0 8px}.overlay-card p{color:var(--muted);margin:0 0 15px}.footer{color:#7588a6;text-align:center;font-size:11px;padding:14px 4px 0}.hidden{display:none!important}.notice{padding:10px;border-radius:10px;background:#102b28;border:1px solid #236b58;color:#a9ffe0;font-size:13px;margin-top:10px}.modal{position:fixed;inset:0;background:#030813c9;display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}.modal-card{width:min(420px,100%);text-align:center;background:#111c30;border:1px solid #3a5479;border-radius:18px;padding:22px;box-shadow:0 20px 70px #0009}.modal-card h2{margin:0 0 8px}.modal-card p{color:var(--muted)}.confetti{font-size:26px;letter-spacing:5px;margin:6px}.keycap{display:inline-block;padding:2px 6px;border:1px solid #405675;border-radius:5px;background:#17253d;font-size:11px}.zoom-controls{display:flex;gap:6px;align-items:center}.zoom-controls button{padding:6px 10px}.zoom-label{font-size:12px;color:var(--muted);min-width:42px;text-align:center}
+@media(max-width:780px){.app{padding:12px 10px 20px}.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .panel:last-child{grid-column:1/-1}.stats{width:100%}.stat{flex:1;min-width:0}.maze-wrap canvas{max-height:58vh}.dodge-wrap{max-height:58vh}}
+@media(max-width:440px){.side{grid-template-columns:1fr}.side .panel:last-child{grid-column:auto}.top{align-items:flex-start}.stat{padding:7px 9px}.stat strong{font-size:16px}.tabs button{padding:10px 7px;font-size:13px}.panel{padding:10px}.level-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.quiz-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:12px;align-items:start}.quiz-mascot{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid #28518a;border-radius:14px;background:radial-gradient(ellipse at top left,#183c70,#101c31 70%);margin-bottom:14px}.quiz-bot{flex:0 0 94px;width:94px;height:94px;border-radius:26px;display:grid;place-items:center;font-size:58px;background:linear-gradient(145deg,#183e7b,#0a1730);border:2px solid #4da8ff;box-shadow:0 0 22px #168bff55}.quiz-speech{flex:1;min-width:0}.quiz-speech strong{display:block;color:#80c7ff;margin-bottom:4px}.quiz-speech p{margin:0}.quiz-question{font-size:clamp(18px,3vw,24px);font-weight:800;margin:12px 0 16px}.quiz-answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quiz-answer{text-align:left;min-height:56px;background:#142641;border-color:#2d4e79}.quiz-answer.correct{background:#123d32;border-color:#35d69b}.quiz-answer.wrong{background:#49212c;border-color:#ff647c}.quiz-answer:disabled{opacity:1}.quiz-feedback{margin-top:12px;padding:12px;border-radius:12px;background:#101c30;border:1px solid #2b3d5b;min-height:48px}.quiz-feedback.good{border-color:#2aa77a;color:#a6ffda}.quiz-feedback.bad{border-color:#bb465c;color:#ffd1d8}.quiz-actions{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:14px}.quiz-mini{font-size:12px;color:var(--muted)}.quiz-topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 16px}.quiz-topic{min-height:48px;text-align:left;font-weight:700;background:#101c30}.quiz-topic.selected{background:#17395d;border-color:#55a8ff;box-shadow:0 0 0 1px #55a8ff33 inset}.quiz-topic small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+@media(max-width:760px){.quiz-layout{grid-template-columns:1fr}.quiz-answers{grid-template-columns:1fr}.quiz-mascot{align-items:flex-start}.quiz-bot{flex-basis:76px;width:76px;height:76px;font-size:46px;border-radius:22px}}
+
+
+/* Quizzy refresh: tournament interface */
+#quizScreen{gap:14px}
+.quiz-shell{position:relative;overflow:hidden;background:linear-gradient(145deg,#151b3b 0%,#10182d 48%,#101c30 100%);border:1px solid #34446d;border-radius:20px;padding:clamp(13px,2.4vw,22px);box-shadow:0 18px 50px #0004}
+.quiz-shell:before{content:"";position:absolute;right:-75px;top:-100px;width:230px;height:230px;border-radius:50%;background:#8b5cf622;filter:blur(4px);pointer-events:none}
+.quiz-hero{position:relative;display:flex;gap:14px;align-items:center;padding:15px;border-radius:17px;border:1px solid #5152a0;background:linear-gradient(120deg,#27265a,#183451 75%);margin:12px 0 17px}
+.quiz-bot{background:linear-gradient(145deg,#6d5df5,#167db9);border:2px solid #9ce8ff;box-shadow:0 0 28px #5b7cfa55;flex:0 0 82px;width:82px;height:82px;border-radius:25px;font-size:48px}
+.quiz-speech strong{color:#a9e8ff;letter-spacing:.04em}
+.quiz-topics{grid-template-columns:repeat(2,minmax(0,1fr));margin:12px 0 17px}
+.quiz-topic{border-radius:13px;border-color:#354568;background:linear-gradient(145deg,#172744,#121d32);padding:12px;transition:transform .15s,border-color .15s}
+.quiz-topic.selected{background:linear-gradient(135deg,#342c75,#164a69);border-color:#82dfff;box-shadow:0 0 0 1px #82dfff33 inset}
+.quiz-topic:active{transform:scale(.985)}
+.quiz-rounds{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:12px 0 17px}
+.quiz-round{position:relative;min-width:0;padding:10px 4px;border-radius:12px;background:#111d31;border:1px solid #354568;text-align:center}
+.quiz-round strong{display:block;font-size:18px}
+.quiz-round small{display:block;color:var(--muted);font-size:10px;line-height:1.25;margin-top:3px}
+.quiz-round.selected{background:linear-gradient(145deg,#40358a,#145071);border-color:#90e4ff;box-shadow:0 0 0 1px #90e4ff33 inset}
+.quiz-round.done{border-color:#2aa77a;background:#10362f}
+.quiz-round.locked{opacity:.48}
+.quiz-round:disabled{opacity:.48}
+.quiz-round-note{font-size:12px;color:#b9c8e4;margin:0 0 12px}
+.quiz-hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:13px 0}
+.quiz-hud .metric{border-radius:13px;background:#0c1628;border-color:#33425f}
+.quiz-hud .metric strong{font-size:clamp(16px,2.7vw,21px)}
+.quiz-question-card{border:1px solid #354568;border-radius:17px;padding:clamp(14px,2.5vw,22px);background:linear-gradient(145deg,#111e34,#10182a);margin-top:12px}
+.quiz-question{line-height:1.3;margin:10px 0 18px;min-height:2.4em}
+.quiz-answers{gap:10px}
+.quiz-answer{position:relative;display:flex;align-items:center;min-height:62px;border-radius:13px;border-color:#354a70;background:linear-gradient(130deg,#192b49,#142239);padding:13px;text-align:left;line-height:1.35;transition:transform .12s,border-color .12s,background .12s}
+.quiz-answer:not(:disabled):hover{transform:translateY(-1px);border-color:#7bdcff;background:#1b3454}
+.quiz-answer.correct{background:linear-gradient(120deg,#124737,#12382f);border-color:#4ee4aa}
+.quiz-answer.wrong{background:linear-gradient(120deg,#542337,#3a1b2b);border-color:#ff718e}
+.quiz-feedback{border-radius:13px;min-height:54px;line-height:1.45}
+.quiz-progress-track{height:7px;border-radius:99px;background:#25324c;overflow:hidden;margin:8px 0 4px}
+.quiz-progress-fill{height:100%;width:0;background:linear-gradient(90deg,#8a74ff,#4dd7ed);border-radius:99px;transition:width .2s}
+.quiz-lives{display:flex;gap:5px;align-items:center;font-size:13px;font-weight:700}
+.quiz-lives span{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#392238;border:1px solid #78405b;color:#ff9db1}
+.quiz-lives span.used{background:#1b2639;border-color:#35415a;color:#62728d;opacity:.7}
+.quiz-actions{margin-top:13px}
+.quiz-actions button{min-width:150px}
+.quiz-side-card{background:linear-gradient(150deg,#171f3a,#101a2c);border-color:#344568}
+@media(max-width:760px){.quiz-shell{padding:11px}.quiz-hero{padding:11px;gap:10px}.quiz-bot{flex-basis:68px;width:68px;height:68px;font-size:39px}.quiz-rounds{gap:5px}.quiz-round{padding:9px 2px}.quiz-round strong{font-size:16px}.quiz-round small{font-size:9px}.quiz-hud{grid-template-columns:repeat(2,minmax(0,1fr))}.quiz-answers{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brand"><h1>🎮 Maze Game</h1><p>Лабиринт, уклонение и викторина · три режима</p></div><div class="stats"><div class="stat"><small>Всего очков</small><strong id="totalPoints">0</strong></div><div class="stat"><small>Пройдено лабиринтов</small><strong id="completed">0</strong></div><div class="stat"><small>Рекорд уклонения</small><strong id="bestDodgeTop">0</strong></div></div></header>
+<div class="tabs"><button id="mazeTab" class="active" type="button">🧩 Лабиринт</button><button id="dodgeTab" type="button">⚡ Уклонение</button><button id="quizTab" type="button">🧠 Викторина</button></div>
+<main id="mazeScreen" class="layout">
+<section class="panel"><div class="row spread"><h2>Найди выход</h2><span class="muted tiny" id="mazeLevelLabel">Уровень 1 · 10×10</span></div><div class="level-list" id="levelList"></div><div class="row spread"><span class="tiny muted">Старт <span class="good">■</span> · Выход <span style="color:var(--red)">■</span> · Твой путь <span style="color:#63b4ff">■</span></span><div class="row"><button id="restartMaze" type="button">↻ Заново</button><button id="newMaze" class="primary" type="button">Новый лабиринт</button></div></div><div class="row spread" style="margin-top:8px"><span class="tiny muted">Масштаб поля</span><div class="zoom-controls"><button id="mazeZoomOut" type="button" aria-label="Уменьшить масштаб">−</button><span id="mazeZoomLabel" class="zoom-label">100%</span><button id="mazeZoomIn" type="button" aria-label="Увеличить масштаб">+</button><button id="mazeZoomReset" type="button">Сброс</button></div></div><div class="maze-wrap" id="mazeWrap"><canvas id="mazeCanvas" width="700" height="700" aria-label="Лабиринт"></canvas></div><p class="hint">ПК: WASD. Телефон: проведи пальцем в нужную сторону или нажми на соседнюю клетку. Масштаб можно менять кнопками.</p><div id="mazeMessage" class="notice hidden"></div></section>
+<aside class="side"><section class="panel"><h3>Твоя статистика</h3><div class="metric-grid"><div class="metric"><small>Шаги</small><strong id="steps">0</strong></div><div class="metric"><small>Время</small><strong id="mazeTime">0:00</strong></div><div class="metric"><small>Награда</small><strong id="mazeReward">100</strong></div><div class="metric"><small>Следующий уровень</small><strong id="nextCost">Открыт</strong></div></div></section><section class="panel"><h3>Как играть</h3><p class="muted tiny">Двигайся по проходам от зелёного старта к красному выходу. Стены не пропускают. За завершение получаешь очки. Более сложные лабиринты открываются за очки.</p><p class="tiny muted">Прогресс и накопления автоматически сохраняются в браузере этого устройства.</p></section></aside>
+</main>
+<main id="dodgeScreen" class="layout hidden"><section class="panel"><div class="row spread"><h2>Уклонение</h2><span class="muted tiny">Выживай как можно дольше</span></div><div class="metric-grid"><div class="metric"><small>Очки раунда</small><strong id="dodgeScore">0</strong></div><div class="metric"><small>Время</small><strong id="dodgeTime">0.0 с</strong></div><div class="metric"><small>Рекорд</small><strong id="dodgeBest">0</strong></div><div class="metric"><small>Скорость</small><strong id="dodgeSpeed">1.0×</strong></div></div><div class="dodge-wrap" id="dodgeWrap"><div class="dodge-stage" id="dodgeStage"><canvas id="dodgeCanvas" width="560" height="600" aria-label="Поле уклонения"></canvas><div id="dodgeOverlay" class="dodge-overlay"><div class="overlay-card"><h2 id="dodgeOverlayTitle">Готов?</h2><p id="dodgeOverlayText">Управляй синим кругом и уклоняйся от горизонтальных копий.</p><button id="startDodge" class="primary" type="button">Начать игру</button></div></div></div></div><div class="row spread" style="margin-top:10px"><span class="tiny muted">Круг движется по клеткам. Столкновение завершает раунд.</span><button id="restartDodge" type="button">↻ Перезапустить</button></div><p class="hint">ПК: W/S или ↑/↓. Телефон: проведи пальцем вверх или вниз, чтобы переместиться на одну клетку. Джойстика нет. Очки за пройденные копья добавляются к общему балансу.</p><div class="row spread" style="margin-top:8px"><span class="tiny muted">Масштаб поля</span><div class="zoom-controls"><button id="dodgeZoomOut" type="button">−</button><span id="dodgeZoomLabel" class="zoom-label">100%</span><button id="dodgeZoomIn" type="button">+</button><button id="dodgeZoomReset" type="button">Сброс</button></div></div></section><aside class="side"><section class="panel"><h3>Правила</h3><p class="muted tiny">Чёрные копья летят горизонтально через игровую зону. Перемещайся на одну клетку вверх или вниз, чтобы уклоняться. Касаться границы нельзя.</p><p class="muted tiny">Лучший результат сохраняется отдельно от очков лабиринта.</p></section><section class="panel"><h3>Результат</h3><div class="metric-grid"><div class="metric"><small>Всего раундов</small><strong id="dodgeRounds">0</strong></div><div class="metric"><small>Лучшее время</small><strong id="dodgeBestTime">0.0 с</strong></div><div class="metric"><small>Баланс очков</small><strong id="dodgeBank">0</strong></div></div></section></aside></main>
+
+<main id="quizScreen" class="quiz-layout hidden">
+<section class="quiz-shell">
+ <div class="row spread"><h2>🧠 Квиззи: Турнир знаний</h2><span class="muted tiny" id="quizProgress">Выбери тему</span></div>
+ <div class="quiz-hero"><div class="quiz-bot" aria-hidden="true">🤖</div><div class="quiz-speech"><strong>КВИЗЗИ</strong><p id="quizSpeech">Выбирай тему и пройди пять туров. Каждый следующий тур сложнее, а права на ошибку становится меньше!</p></div></div>
+ <h3>1. Выбери тему</h3>
+ <div class="quiz-topics" id="quizTopics">
+  <button type="button" class="quiz-topic selected" data-topic="logic">🧩 Логика и загадки<small>Задачи на сообразительность</small></button>
+  <button type="button" class="quiz-topic" data-topic="facts">🌍 Общие знания<small>История, открытия и события</small></button>
+  <button type="button" class="quiz-topic" data-topic="math">📐 Математика и алгебра<small>От счёта до сложных задач</small></button>
+  <button type="button" class="quiz-topic" data-topic="games">🎮 Видеоигры<small>Игры, персонажи и игровые миры</small></button>
+ </div>
+ <h3>2. Выбери тур</h3>
+ <div class="quiz-rounds" id="quizRoundsList"></div>
+ <p class="quiz-round-note" id="quizRoundNote">В каждом туре 10 вопросов. Проходи туры по порядку.</p>
+ <div class="quiz-hud">
+  <div class="metric"><small>Верные ответы</small><strong id="quizCorrect">0</strong></div>
+  <div class="metric"><small>Очки за тур</small><strong id="quizPoints">0</strong></div>
+  <div class="metric"><small>Вопрос</small><strong id="quizQuestionCount">0/10</strong></div>
+  <div class="metric"><small>Ошибки</small><strong id="quizMistakeCount">0</strong></div>
+ </div>
+ <div class="row spread"><span class="quiz-mini" id="quizDifficulty">Сложность: разминка</span><div class="quiz-lives" id="quizLives" aria-label="Оставшиеся ошибки"></div></div>
+ <div class="quiz-progress-track"><div id="quizProgressFill" class="quiz-progress-fill"></div></div>
+ <div class="quiz-question-card">
+  <div id="quizQuestion" class="quiz-question">Выбери тему и нажми «Начать тур».</div>
+  <div id="quizAnswers" class="quiz-answers"></div>
+  <div id="quizFeedback" class="quiz-feedback" aria-live="polite">Квиззи готов к игре.</div>
+  <div class="quiz-actions"><span class="quiz-mini">Правильный ответ: +100 очков</span><button id="quizNext" class="primary" type="button">Начать тур</button></div>
+ </div>
+</section>
+<aside class="side">
+ <section class="panel quiz-side-card"><h3>🏆 Правила турнира</h3><p class="muted tiny">Каждый тур состоит из 10 вопросов. За каждый правильный ответ начисляется 100 очков, если это первая попытка этого тура.</p><div class="metric-grid">
+ <div class="metric"><small>Тур 1</small><strong>5 ошибок</strong></div><div class="metric"><small>Тур 2</small><strong>4 ошибки</strong></div>
+ <div class="metric"><small>Тур 3</small><strong>3 ошибки</strong></div><div class="metric"><small>Тур 4</small><strong>2 ошибки</strong></div>
+ <div class="metric"><small>Тур 5</small><strong>1 ошибка</strong></div><div class="metric"><small>Всего вопросов</small><strong>50</strong></div>
+ </div><p class="muted tiny">При достижении лимита ошибок попытка завершается. Повторить тур можно, но очки за повторные попытки не начисляются.</p></section>
+ <section class="panel quiz-side-card"><h3>📊 Статистика</h3><div class="metric-grid"><div class="metric"><small>Лучшая серия</small><strong id="quizBestStreak">0</strong></div><div class="metric"><small>Завершено туров</small><strong id="quizRounds">0</strong></div></div><p class="muted tiny">Баланс и результаты сохраняются в браузере устройства.</p></section>
+</aside>
+</main>
+
+<div class="footer">Maze Game · прогресс хранится в браузере этого устройства</div></div>
+<div id="winModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card"><div class="confetti">✨ 🎉 ✨</div><h2>Лабиринт пройден!</h2><p id="winText">Ты нашёл выход.</p><button id="winContinue" class="primary" type="button">Продолжить</button></div></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), SAVE_KEY='mazeGameProgress_v2';
+const LEVELS=[{size:10,cost:0,reward:100},{size:16,cost:0,reward:200},{size:24,cost:1500,reward:350},{size:30,cost:2500,reward:500},{size:36,cost:3500,reward:750},{size:42,cost:4000,reward:1000}];
+const defaults={points:0,completed:0,unlocked:2,selected:0,mazeBest:{},dodgeBest:0,dodgeBestTime:0,dodgeRounds:0};
+let save=loadSave(),maze=null,player={x:0,y:0},path=[],steps=0,mazeStarted=0,mazeTimer=null,mazeWon=false,activeMode='maze',mazeZoom=1,dodgeZoom=1;
+function loadSave(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return {...defaults};const s=JSON.parse(raw);return {...defaults,...s,mazeBest:s.mazeBest||{},points:Math.max(0,Number(s.points)||0),unlocked:Math.max(1,Math.min(LEVELS.length,Number(s.unlocked)||2)),selected:Math.max(0,Math.min(LEVELS.length-1,Number(s.selected)||0))}}catch(e){return {...defaults}}}
+function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(save))}catch(e){}updateHeader()}
+function updateHeader(){$('totalPoints').textContent=save.points.toLocaleString('ru-RU');$('completed').textContent=save.completed;$('bestDodgeTop').textContent=save.dodgeBest;$('dodgeBest').textContent=save.dodgeBest;$('dodgeRounds').textContent=save.dodgeRounds;$('dodgeBestTime').textContent=save.dodgeBestTime.toFixed(1)+' с';$('dodgeBank').textContent=save.points.toLocaleString('ru-RU')}
+function formatTime(sec){sec=Math.max(0,Math.floor(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
+function showMode(mode){activeMode=mode;$('mazeScreen').classList.toggle('hidden',mode!=='maze');$('dodgeScreen').classList.toggle('hidden',mode!=='dodge');$('mazeTab').classList.toggle('active',mode==='maze');$('dodgeTab').classList.toggle('active',mode==='dodge');if(mode==='maze')drawMaze();else resizeDodge()}
+$('mazeTab').addEventListener('click',()=>showMode('maze'));$('dodgeTab').addEventListener('click',()=>showMode('dodge'));
+function buildLevelButtons(){const list=$('levelList');list.innerHTML='';LEVELS.forEach((lv,i)=>{const b=document.createElement('button');b.type='button';b.className='level'+(i===save.selected?' selected':'');const locked=i>=save.unlocked;b.disabled=locked&&save.points<lv.cost;b.innerHTML=`<span class="n">${i+1}</span>${lv.size}×${lv.size}<br><span class="tiny ${locked?'gold':'good'}">${locked?'🔒 '+lv.cost.toLocaleString('ru-RU')+' оч.':'Открыт'}</span>`;b.addEventListener('click',()=>{if(locked){if(save.points>=lv.cost){save.points-=lv.cost;save.unlocked=Math.max(save.unlocked,i+1);save.selected=i;persist();buildLevelButtons();startMaze()}return}save.selected=i;persist();buildLevelButtons();startMaze()});list.appendChild(b)})}
+function generateMaze(n){const cells=Array.from({length:n},()=>Array.from({length:n},()=>({w:[1,1,1,1],seen:false})));const dirs=[[-1,0,0,2],[0,1,1,3],[1,0,2,0],[0,-1,3,1]],stack=[[0,0]];cells[0][0].seen=true;while(stack.length){const [y,x]=stack[stack.length-1],options=[];for(const [dy,dx,wall,opp] of dirs){const ny=y+dy,nx=x+dx;if(ny>=0&&ny<n&&nx>=0&&nx<n&&!cells[ny][nx].seen)options.push([ny,nx,wall,opp])}if(!options.length){stack.pop();continue}const [ny,nx,wall,opp]=options[Math.floor(Math.random()*options.length)];cells[y][x].w[wall]=0;cells[ny][nx].w[opp]=0;cells[ny][nx].seen=true;stack.push([ny,nx])}cells[0][0].w[3]=0;cells[n-1][n-1].w[1]=0;return cells}
+function startMaze(){clearInterval(mazeTimer);const lv=LEVELS[save.selected];maze=generateMaze(lv.size);player={x:0,y:0};path=[{x:0,y:0}];steps=0;mazeWon=false;mazeStarted=Date.now();$('mazeMessage').classList.add('hidden');$('mazeLevelLabel').textContent=`Уровень ${save.selected+1} · ${lv.size}×${lv.size}`;$('mazeReward').textContent=lv.reward;$('nextCost').textContent=save.selected+1>=save.unlocked?(save.selected+1<LEVELS.length?LEVELS[save.selected+1].cost.toLocaleString('ru-RU')+' оч.':'Максимум'):'Открыт';$('steps').textContent='0';$('mazeTime').textContent='0:00';mazeTimer=setInterval(()=>{if(!mazeWon)$('mazeTime').textContent=formatTime((Date.now()-mazeStarted)/1000)},500);drawMaze();buildLevelButtons()}
+function drawMaze(){if(!maze)return;const canvas=$('mazeCanvas'),ctx=canvas.getContext('2d'),n=maze.length;const base=Math.max(260,Math.min(700,$('mazeWrap').clientWidth||700)),size=base*mazeZoom,dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(size*dpr);canvas.height=Math.round(size*dpr);canvas.style.width=size+'px';canvas.style.height=size+'px';canvas.style.maxWidth='none';ctx.setTransform(dpr,0,0,dpr,0,0);const cs=size/n;ctx.fillStyle='#0b1425';ctx.fillRect(0,0,size,size);ctx.strokeStyle='#15243a';ctx.lineWidth=Math.max(.5,cs*.025);for(let i=1;i<n;i++){ctx.beginPath();ctx.moveTo(i*cs,0);ctx.lineTo(i*cs,size);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*cs);ctx.lineTo(size,i*cs);ctx.stroke()}for(const p of path){ctx.fillStyle=p.x===player.x&&p.y===player.y?'#22558a':'#17416c';ctx.fillRect(p.x*cs+cs*.15,p.y*cs+cs*.15,cs*.7,cs*.7)}ctx.fillStyle='#1d8b5c';ctx.fillRect(cs*.12,cs*.12,cs*.76,cs*.76);ctx.fillStyle='#f0526d';ctx.fillRect((n-1)*cs+cs*.12,(n-1)*cs+cs*.12,cs*.76,cs*.76);ctx.strokeStyle='#9db6d6';ctx.lineWidth=Math.max(1.2,cs*.075);ctx.lineCap='square';ctx.beginPath();for(let y=0;y<n;y++)for(let x=0;x<n;x++){const w=maze[y][x].w,px=x*cs,py=y*cs;if(w[0]){ctx.moveTo(px,py);ctx.lineTo(px+cs,py)}if(w[3]){ctx.moveTo(px,py);ctx.lineTo(px,py+cs)}if(y===n-1&&w[2]){ctx.moveTo(px,py+cs);ctx.lineTo(px+cs,py+cs)}if(x===n-1&&w[1]){ctx.moveTo(px+cs,py);ctx.lineTo(px+cs,py+cs)}}ctx.stroke();ctx.beginPath();ctx.arc((player.x+.5)*cs,(player.y+.5)*cs,Math.max(3,cs*.27),0,Math.PI*2);ctx.fillStyle='#74c4ff';ctx.shadowColor='#4aaeff';ctx.shadowBlur=cs*.5;ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#eaf7ff';ctx.lineWidth=Math.max(1,cs*.06);ctx.stroke();$('mazeZoomLabel').textContent=Math.round(mazeZoom*100)+'%'}
+function canMove(dx,dy){if(!maze||mazeWon)return false;const n=maze.length,nx=player.x+dx,ny=player.y+dy;if(nx<0||ny<0||nx>=n||ny>=n)return false;let wall=dx===1?maze[player.y][player.x].w[1]:dx===-1?maze[player.y][player.x].w[3]:dy===1?maze[player.y][player.x].w[2]:maze[player.y][player.x].w[0];return !wall}
+function moveMaze(dx,dy){if(activeMode!=='maze'||mazeWon||!maze||!canMove(dx,dy))return;player.x+=dx;player.y+=dy;steps++;$('steps').textContent=steps;path.push({x:player.x,y:player.y});drawMaze();if(player.x===maze.length-1&&player.y===maze.length-1)finishMaze()}
+function finishMaze(){mazeWon=true;clearInterval(mazeTimer);const elapsed=(Date.now()-mazeStarted)/1000,lv=LEVELS[save.selected],reward=lv.reward;save.points+=reward;save.completed++;save.mazeBest[save.selected]=Math.min(save.mazeBest[save.selected]||Infinity,elapsed);persist();buildLevelButtons();$('winText').textContent=`Уровень ${save.selected+1} пройден за ${formatTime(elapsed)} и ${steps} шагов. Награда: +${reward} очков!`;$('winModal').classList.remove('hidden')}
+$('winContinue').addEventListener('click',()=>{$('winModal').classList.add('hidden');const next=save.selected+1;if(next<LEVELS.length&&next<save.unlocked){save.selected=next;persist();buildLevelButtons();startMaze()}else buildLevelButtons()});
+$('restartMaze').addEventListener('click',startMaze);$('newMaze').addEventListener('click',startMaze);
+$('mazeCanvas').addEventListener('click',e=>{if(!maze||mazeWon)return;const r=e.currentTarget.getBoundingClientRect(),n=maze.length,cw=r.width/n,ch=r.height/n,x=Math.floor((e.clientX-r.left)/cw),y=Math.floor((e.clientY-r.top)/ch),dx=x-player.x,dy=y-player.y;if(Math.abs(dx)+Math.abs(dy)!==1)return;if(dx)moveMaze(Math.sign(dx),0);else moveMaze(0,Math.sign(dy))});
+let mazeTouch=null;
+$('mazeCanvas').addEventListener('touchstart',e=>{if(e.touches.length===1)mazeTouch={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
+$('mazeCanvas').addEventListener('touchmove',e=>{if(e.touches.length===1)e.preventDefault();},{passive:false});
+$('mazeCanvas').addEventListener('touchend',e=>{if(!mazeTouch||e.changedTouches.length!==1)return;const t=e.changedTouches[0],dx=t.clientX-mazeTouch.x,dy=t.clientY-mazeTouch.y;mazeTouch=null;if(Math.max(Math.abs(dx),Math.abs(dy))<22)return;if(Math.abs(dx)>Math.abs(dy))moveMaze(dx>0?1:-1,0);else moveMaze(0,dy>0?1:-1);},{passive:false});
+$('mazeCanvas').addEventListener('touchcancel',()=>{mazeTouch=null},{passive:true});
+// Dodge: fixed grid geometry, black horizontal spears, one-cell vertical moves.
+const dc=$('dodgeCanvas'),dctx=dc.getContext('2d'),dodgeStage=$('dodgeStage');
+let dodge={running:false,over:false,start:0,last:0,score:0,row:7,obstacles:[],spawn:0,speed:250,elapsed:0,raf:0};
+function dodgeDims(){const w=Math.max(280,Math.min(700,$('dodgeWrap').clientWidth||560));return {w,h:w*600/560}}
+function dodgeGeometry(){const {w,h}=dodgeDims(),cols=9,rows=15,cs=h/rows,cellW=w/cols,laneX=0,laneW=w;return {w,h,cs,rows,cols,cellW,laneX,laneW,pr:Math.min(cs*.28,cellW*.28),playerCol:4}}
+function clampDodgePlayer(){const g=dodgeGeometry();dodge.row=Math.max(1,Math.min(g.rows-2,dodge.row))}
+function resizeDodge(){const g=dodgeGeometry(),dpr=Math.min(window.devicePixelRatio||1,2),sw=g.w*dodgeZoom,sh=g.h*dodgeZoom;dodgeStage.style.width=sw+'px';dodgeStage.style.height=sh+'px';dc.style.width=sw+'px';dc.style.height=sh+'px';dc.width=Math.round(g.w*dpr);dc.height=Math.round(g.h*dpr);dctx.setTransform(dpr,0,0,dpr,0,0);clampDodgePlayer();drawDodge()}
+function resetDodge(){cancelAnimationFrame(dodge.raf);dodge.running=false;dodge.over=false;dodge.score=0;dodge.elapsed=0;dodge.obstacles=[];dodge.spawn=.65;dodge.speed=250;const g=dodgeGeometry();dodge.row=Math.floor(g.rows/2);$('dodgeScore').textContent='0';$('dodgeTime').textContent='0.0 с';$('dodgeSpeed').textContent='1.0×';$('dodgeOverlayTitle').textContent='Готов?';$('dodgeOverlayText').textContent='Управляй синим кругом и уклоняйся от чёрных копий, летящих горизонтально.';$('startDodge').textContent='Начать игру';$('dodgeOverlay').classList.remove('hidden');resizeDodge()}
+function drawDodge(){if(!dc||!dctx)return;const g=dodgeGeometry(),{w,h,cs,rows,cols,cellW,pr,playerCol}=g;dctx.clearRect(0,0,w,h);dctx.fillStyle='#0b1425';dctx.fillRect(0,0,w,h);dctx.fillStyle='#103d72';dctx.fillRect(0,0,w,h);dctx.strokeStyle='#1a568f';dctx.lineWidth=1;for(let c=1;c<cols;c++){const x=c*cellW;dctx.beginPath();dctx.moveTo(x,0);dctx.lineTo(x,h);dctx.stroke()}for(let r=1;r<rows;r++){const y=r*cs;dctx.beginPath();dctx.moveTo(0,y);dctx.lineTo(w,y);dctx.stroke()}
+const px=(playerCol+.5)*cellW,py=(dodge.row+.5)*cs,spearH=Math.max(5,cs*.17);
+for(const ob of dodge.obstacles){const y=(ob.row+.5)*cs;dctx.fillStyle='#080c14';dctx.strokeStyle='#02050a';dctx.lineWidth=1;dctx.fillRect(ob.x,y-spearH/2,ob.len,spearH);dctx.beginPath();if(ob.dir<0){dctx.moveTo(ob.x,y);dctx.lineTo(ob.x+Math.min(12,ob.len*.22),y-spearH*.8);dctx.lineTo(ob.x+Math.min(12,ob.len*.22),y+spearH*.8)}else{dctx.moveTo(ob.x+ob.len,y);dctx.lineTo(ob.x+ob.len-Math.min(12,ob.len*.22),y-spearH*.8);dctx.lineTo(ob.x+ob.len-Math.min(12,ob.len*.22),y+spearH*.8)}dctx.closePath();dctx.fill()}
+dctx.beginPath();dctx.arc(px,py,pr,0,Math.PI*2);dctx.fillStyle='#168bff';dctx.shadowColor='#65c9ff';dctx.shadowBlur=12;dctx.fill();dctx.shadowBlur=0;dctx.strokeStyle='#d9f4ff';dctx.lineWidth=2;dctx.stroke();
+// Exactly one thin boundary around the playable area.
+dctx.strokeStyle='#c4cfdd';dctx.lineWidth=1.5;dctx.strokeRect(.75,.75,w-1.5,h-1.5);
+$('dodgeZoomLabel').textContent=Math.round(dodgeZoom*100)+'%'}
+function startDodge(){if(dodge.running)return;cancelAnimationFrame(dodge.raf);const g=dodgeGeometry();dodge.running=true;dodge.over=false;dodge.start=performance.now();dodge.last=dodge.start;dodge.elapsed=0;dodge.score=0;dodge.obstacles=[];dodge.spawn=.45;dodge.speed=250;dodge.row=Math.floor(g.rows/2);$('dodgeOverlay').classList.add('hidden');dodge.raf=requestAnimationFrame(dodgeFrame)}
+function spawnObstacle(g){const row=1+Math.floor(Math.random()*(g.rows-2)),dir=Math.random()<.5?-1:1,len=g.cellW*(1.3+Math.random()*.35),x=dir<0?g.w+2:-len-2;dodge.obstacles.push({x,row,dir,len,passed:false})}
+function dodgeFrame(now){if(!dodge.running)return;const g=dodgeGeometry(),dt=Math.min(.035,Math.max(0,(now-dodge.last)/1000));dodge.last=now;dodge.elapsed=(now-dodge.start)/1000;dodge.speed=250+Math.min(230,dodge.elapsed*4.5);dodge.spawn-=dt;if(dodge.spawn<=0){spawnObstacle(g);dodge.spawn=Math.max(.42,.9-dodge.elapsed*.005)}for(const ob of dodge.obstacles)ob.x+=ob.dir*dodge.speed*dt;
+dodge.obstacles=dodge.obstacles.filter(ob=>ob.dir<0?ob.x+ob.len>0:ob.x<g.w);
+const px=(g.playerCol+.5)*g.cellW,py=(dodge.row+.5)*g.cs,pr=g.pr,spearH=Math.max(5,g.cs*.17);
+for(const ob of dodge.obstacles){const oy=(ob.row+.5)*g.cs;if(Math.abs(py-oy)<pr+spearH*.45&&px+pr>ob.x&&px-pr<ob.x+ob.len){endDodge();return}
+if(!ob.passed&&((ob.dir<0&&ob.x+ob.len<px-pr)||(ob.dir>0&&ob.x>px+pr))){ob.passed=true;dodge.score+=10;save.points+=10;persist()}}
+$('dodgeScore').textContent=dodge.score;$('dodgeTime').textContent=dodge.elapsed.toFixed(1)+' с';$('dodgeSpeed').textContent=(dodge.speed/250).toFixed(1)+'×';drawDodge();dodge.raf=requestAnimationFrame(dodgeFrame)}
+function endDodge(){dodge.running=false;dodge.over=true;cancelAnimationFrame(dodge.raf);save.dodgeRounds++;if(dodge.score>save.dodgeBest)save.dodgeBest=dodge.score;if(dodge.elapsed>save.dodgeBestTime)save.dodgeBestTime=dodge.elapsed;persist();$('dodgeOverlayTitle').textContent='Раунд окончен';$('dodgeOverlayText').textContent=`Счёт: ${dodge.score}. Время: ${dodge.elapsed.toFixed(1)} с. ${dodge.score>0?'Очки за пройденные копья уже добавлены к балансу.':''}`;$('startDodge').textContent='Играть снова';$('dodgeOverlay').classList.remove('hidden');drawDodge()}
+$('startDodge').addEventListener('click',startDodge);$('restartDodge').addEventListener('click',resetDodge);
+function dodgeMoveRow(delta){if(!dodge.running)return;const before=dodge.row;dodge.row+=delta;clampDodgePlayer();if(before!==dodge.row)drawDodge()}
+let dodgeTouchStart=null;
+dc.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||!dodge.running)return;dodgeTouchStart={id:e.pointerId,y:e.clientY};},{passive:true});
+dc.addEventListener('pointerup',e=>{if(!dodgeTouchStart||dodgeTouchStart.id!==e.pointerId)return;const dy=e.clientY-dodgeTouchStart.y;dodgeTouchStart=null;if(Math.abs(dy)<12)return;dodgeMoveRow(dy<0?-1:1)},{passive:true});
+dc.addEventListener('pointercancel',()=>{dodgeTouchStart=null},{passive:true});
+const keys=new Set(['w','a','s','d','arrowup','arrowdown']);window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(!keys.has(k))return;if(activeMode==='maze'){const map={w:[0,-1],a:[-1,0],s:[0,1],d:[1,0],arrowup:[0,-1],arrowdown:[0,1]};e.preventDefault();moveMaze(...map[k])}else if(activeMode==='dodge'&&dodge.running){if(k==='w'||k==='arrowup'){e.preventDefault();dodgeMoveRow(-1)}if(k==='s'||k==='arrowdown'){e.preventDefault();dodgeMoveRow(1)}}},{passive:false});
+function setMazeZoom(v){mazeZoom=Math.max(.65,Math.min(2,v));drawMaze()}function setDodgeZoom(v){dodgeZoom=Math.max(.75,Math.min(1.5,v));resizeDodge();$('dodgeZoomLabel').textContent=Math.round(dodgeZoom*100)+'%'}
+$('mazeZoomIn').addEventListener('click',()=>setMazeZoom(mazeZoom+.15));$('mazeZoomOut').addEventListener('click',()=>setMazeZoom(mazeZoom-.15));$('mazeZoomReset').addEventListener('click',()=>setMazeZoom(1));
+$('dodgeZoomIn').addEventListener('click',()=>setDodgeZoom(dodgeZoom+.1));$('dodgeZoomOut').addEventListener('click',()=>setDodgeZoom(dodgeZoom-.1));$('dodgeZoomReset').addEventListener('click',()=>setDodgeZoom(1));
+window.addEventListener('resize',()=>{drawMaze();resizeDodge()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&dodge.running)dodge.last=performance.now()});
+$('mazeCanvas').addEventListener('contextmenu',e=>e.preventDefault());
+
+// Quiz mode: endless generated questions, increasing difficulty up to Fermat's Last Theorem.
+let quizDeck=[],quizIndex=0,quizAnswered=false,quizCorrect=0,quizStreak=0,quizRoundPoints=0,quizBestStreak=0,quizRounds=0,quizMistakes=0,quizGameOver=false,quizQuestionNumber=0;
+let quizLifetimeQuestion=0,quizSeen=new Set(),quizTopic='logic',quizTopicSeen={logic:new Set(),facts:new Set(),games:new Set()};
+try{
+ quizBestStreak=Number(localStorage.getItem('mazeQuizBestStreak_v1'))||0;
+ quizRounds=Number(localStorage.getItem('mazeQuizRounds_v1'))||0;
+ quizLifetimeQuestion=Number(localStorage.getItem('mazeQuizLifetimeQuestion_v2'))||0;
+ quizSeen=new Set(JSON.parse(localStorage.getItem('mazeQuizSeen_v2')||'[]'));
+}catch(e){}
+function quizShuffle(list){const out=list.slice();for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out}
+function quizInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function quizMake(q,answer,explanation,...distractorArgs){
+ const distractors=distractorArgs.flat();
+ const correct=String(answer),opts=[correct];
+ for(const d of distractors){const v=String(d);if(!opts.includes(v)&&opts.length<4)opts.push(v)}
+ let guard=0;while(opts.length<4&&guard++<100){let v=String(quizInt(-99,999));if(!opts.includes(v))opts.push(v)}
+ const shuffled=quizShuffle(opts);return {q,a:shuffled,c:shuffled.indexOf(correct),e:explanation,level:Math.min(12,Math.floor(quizLifetimeQuestion/3)+1)}
+}
+const quizTopicBanks={
+ logic:[
+  ['Что становится больше, если его перевернуть вверх ногами?','Число 6','Перевёрнутая шестёрка выглядит как девятка.',['Число 3','Число 8','Число 1']],
+  ['У отца Марины пять дочерей: Лала, Леле, Лили, Лоло. Как зовут пятую?','Марина','Имя уже дано в начале загадки.',['Лулу','Лулуся','Лала']],
+  ['Что можно увидеть с закрытыми глазами?','Сон','Во сне мы видим образы, хотя глаза закрыты.',['Солнце','Зеркало','Дорогу']],
+  ['У стола четыре угла. Один угол отпилили. Сколько углов стало?','Пять','Отпиливание одного угла создаёт два новых угла вместо одного.',['Три','Четыре','Шесть']],
+  ['Что принадлежит тебе, но другие используют это чаще тебя?','Твоё имя','Другие чаще произносят твоё имя, обращаясь к тебе.',['Твой телефон','Твоя комната','Твой день рождения']],
+  ['Два отца и два сына нашли три яблока, и каждому досталось по одному. Как?','Это дед, отец и сын','Три человека одновременно являются двумя отцами и двумя сыновьями.',['Один не ел яблоко','Яблоки разделили пополам','Это невозможно']],
+  ['Что имеет города, но не имеет домов; реки, но нет воды?','Карта','На карте обозначены города и реки.',['Книга','Телевизор','Фотография']],
+  ['Чем больше из неё берёшь, тем больше она становится. Что это?','Яма','Чем больше земли вынимаешь, тем больше яма.',['Коробка','Сумка','Бутылка']],
+  ['В комнате горело 5 свечей. Две погасли. Сколько свечей останется?','Две','Погасшие две не сгорят полностью, а остальные продолжают гореть.',['Пять','Три','Ноль']],
+  ['Какое колесо не вращается при повороте автомобиля направо?','Запасное','Запасное колесо не касается дороги во время движения.',['Переднее левое','Заднее правое','Все вращаются']],
+  ['Что можно сломать, даже ни разу не прикоснувшись?','Обещание','Обещание можно нарушить, не трогая предметов.',['Стекло','Карандаш','Стул']],
+  ['В каком месяце 28 дней?','В каждом','Во всех месяцах есть как минимум 28 дней.',['Только в феврале','В январе и феврале','В июне']]
+ ],
+ facts:[
+  ['Кто убил президента США Джона Кеннеди согласно выводам официальных расследований?','Ли Харви Освальд','Освальд был обвинён в убийстве; он был убит до суда, поэтому вопрос об обстоятельствах остаётся предметом исторических споров.',['Нил Армстронг','Ричард Никсон','Мартин Лютер Кинг']],
+  ['Кто достиг Северной Америки примерно за 500 лет до Колумба?','Лейф Эриксон и другие скандинавы','Скандинавские мореплаватели добрались до Винланда около 1000 года.',['Марко Поло','Фернан Магеллан','Джеймс Кук']],
+  ['Кто из европейских мореплавателей прибыл в Карибский регион в 1492 году?','Христофор Колумб','Его экспедиция достигла Карибских островов в 1492 году.',['Америго Веспуччи','Васко да Гама','Джеймс Кук']],
+  ['Можно ли сказать, что Колумб первым открыл Америку для всех людей?','Нет, коренные народы жили там тысячелетиями','Америка была населена задолго до европейских экспедиций.',['Да, до 1492 года там никто не жил','Да, он создал первый город','Нет, потому что Америки не существует']],
+  ['На какой планете находится самая высокая известная гора Солнечной системы, Олимп?','Марс','Олимп расположен на Марсе и является гигантским вулканом.',['Земля','Венера','Юпитер']],
+  ['Какой океан самый большой на Земле?','Тихий океан','Тихий океан занимает наибольшую площадь.',['Атлантический','Индийский','Северный Ледовитый']],
+  ['В каком году человек впервые ступил на Луну?','1969','Аполлон-11 высадился на Луне в июле 1969 года.',['1959','1979','1989']],
+  ['Кто написал роман «Преступление и наказание»?','Фёдор Достоевский','Роман был написан русским писателем Фёдором Достоевским.',['Лев Толстой','Антон Чехов','Александр Пушкин']],
+  ['Как называется столица Австралии?','Канберра','Столица Австралии не Сидней, а Канберра.',['Сидней','Мельбурн','Перт']],
+  ['Какой газ растения поглощают при фотосинтезе?','Углекислый газ','Растения используют углекислый газ и воду для создания органических веществ.',['Кислород','Гелий','Водород']],
+  ['Кто первым совершил кругосветное путешествие в космосе?','Юрий Гагарин','В 1961 году Гагарин стал первым человеком в космосе и облетел Землю.',['Нил Армстронг','Алексей Леонов','Джон Гленн']],
+  ['Какой язык имеет больше всего носителей как родной по распространённым оценкам?','Китайский (мандаринский)','Мандаринский китайский обычно лидирует по числу носителей как родного языка.',['Английский','Испанский','Французский']]
+ ],
+ games:[
+  ['В какой игре можно встретить Крипера?','Minecraft','Криперы являются одним из узнаваемых мобов Minecraft.',['Roblox','Brawl Stars','Among Us']],
+  ['Какая компания создала серию Super Mario?','Nintendo','Марио является одним из главных персонажей Nintendo.',['Sega','Sony','Valve']],
+  ['Как называется игровая платформа, где пользователи создают собственные игры и миры?','Roblox','Roblox объединяет пользовательские игровые проекты.',['Steam','Discord','Twitch']],
+  ['Как называется королевская битва от Epic Games?','Fortnite','Fortnite известна режимом Battle Royale.',['Valorant','Overwatch','Minecraft Dungeons']],
+  ['В какой игре есть персонажи- бойцы и режимы вроде «Захват кристаллов»?','Brawl Stars','Это один из популярных режимов Brawl Stars.',['Clash Royale','Free Fire','Rocket League']],
+  ['Как называется фрукт, дающий способности в Blox Fruits?','Дьявольский фрукт','Фрукты дают персонажу особые способности в Blox Fruits.',['Золотой ключ','Магический блок','Кристалл опыта']],
+  ['Как называется жёлтый персонаж, который поедает точки в лабиринте?','Pac-Man','Pac-Man появился в аркадной игре 1980 года.',['Sonic','Kirby','Crash Bandicoot']],
+  ['Как зовут синего ежа из серии игр Sega?','Соник','Соник является талисманом Sega.',['Марио','Крэш','Линк']],
+  ['В какой игре нужно собирать ресурсы, строить и выживать в блочном мире?','Minecraft','Игроки добывают ресурсы и строят из блоков.',['FIFA','Tetris','Street Fighter']],
+  ['Какая игра известна падающими фигурами, которые нужно складывать в линии?','Tetris','Заполненные горизонтальные линии исчезают.',['Pong','Doom','The Sims']],
+  ['В какой серии игр главный герой часто исследует Хайрул и встречает принцессу Зельду?','The Legend of Zelda','Линк исследует Хайрул в серии The Legend of Zelda.',['Final Fantasy','Pokémon','God of War']],
+  ['Что обычно означает NPC в видеоиграх?','Персонаж, которым не управляет игрок','NPC расшифровывается как non-player character.',['Новый режим гонки','Сетевая игровая приставка','Секретный уровень']]
+ ]
+};
+function quizGenerateQuestion(){
+ if(quizTopic!=='math'){
+  const bank=quizTopicBanks[quizTopic]||quizTopicBanks.logic,seen=quizTopicSeen[quizTopic]||new Set();
+  let available=bank.filter(x=>!seen.has(x[0]));
+  if(!available.length){seen.clear();available=bank.slice();}
+  const entry=available[quizInt(0,available.length-1)];seen.add(entry[0]);quizTopicSeen[quizTopic]=seen;
+  quizLifetimeQuestion++;try{localStorage.setItem('mazeQuizLifetimeQuestion_v2',String(quizLifetimeQuestion));}catch(e){}
+  return quizMake(entry[0],entry[1],entry[2],entry[3]);
+ }
+ // Maths questions increase in difficulty every three questions.
+ const level=Math.min(12,Math.floor(quizLifetimeQuestion/3)+1);
+ let item,tries=0;
+ do { item=quizGenerateAtLevel(level); tries++; } while(quizSeen.has(item.q)&&tries<80);
+ // If an exact prompt somehow repeats, append a distinct challenge number without changing the answer.
+ if(quizSeen.has(item.q)){item.q+=` [задача №${quizLifetimeQuestion+1}]`}
+ quizSeen.add(item.q);quizLifetimeQuestion++;
+ try{localStorage.setItem('mazeQuizLifetimeQuestion_v2',String(quizLifetimeQuestion));localStorage.setItem('mazeQuizSeen_v2',JSON.stringify([...quizSeen].slice(-3000)))}catch(e){}
+ return item;
+}
+function quizGenerateAtLevel(L){
+ let a,b,n,ans,wrong,q,e;
+ if(L===1){a=quizInt(2,20);b=quizInt(2,20);if(Math.random()<.5)return quizMake(`Сколько будет ${a} + ${b}?`,a+b,'Сложи оба числа.',[a+b+1,a+b-1,a+b+3]);return quizMake(`Сколько будет ${a} × ${b}?`,a*b,'Умножение можно проверить повторным сложением.',a*b>2?[a*b+1,a*b-1,a*b+2]:[3,4,5])}
+ if(L===2){a=quizInt(2,30);b=quizInt(2,20);return quizMake(`Вычисли: ${a}² − ${b}².`,a*a-b*b,'Разность квадратов равна (a−b)(a+b).',[a*a+b*b,(a-b)*(a-b),a*a-b])}
+ if(L===3){a=quizInt(2,12);b=quizInt(2,12);n=quizInt(2,10);return quizMake(`Реши уравнение: ${a}x + ${b} = ${a*n+b}. Чему равен x?`,n,'Вычти свободный член и раздели обе части на коэффициент при x.',n+1,n-1,n+2)}
+ if(L===4){a=quizInt(2,15);b=quizInt(2,15);n=quizInt(2,9);return quizMake(`Сократи дробь ${a*n}/${b*n}. Какой дробью она равна?`,`${a}/${b}`,'Числитель и знаменатель делятся на один и тот же множитель.',`${a+1}/${b}`,`${a}/${b+1}`,`${a*n}/${b}`)}
+ if(L===5){a=quizInt(2,12);b=quizInt(2,12);n=quizInt(2,8);return quizMake(`Если f(x) = ${a}x − ${b}, чему равно f(${n})?`,a*n-b,'Подставь заданное значение x в формулу.',a*n+b,a*(n+1)-b,a*n-b+1)}
+ if(L===6){a=quizInt(2,12);b=quizInt(2,12);n=quizInt(2,9);return quizMake(`Вычисли: ${a}^${n%4+2} mod ${b+1}.`,String(Math.pow(a,n%4+2)%(b+1)),'Возведи число в степень и возьми остаток от деления.',String((Math.pow(a,n%4+2)+1)%(b+1)),String((Math.pow(a,n%4+2)+2)%(b+1)),String((Math.pow(a,n%4+2)+3)%(b+1)))}
+ if(L===7){a=quizInt(3,40);while(!isPrimeQuiz(a))a=quizInt(3,40);b=quizInt(2,12);return quizMake(`Число ${a} — простое. Какой остаток даёт ${a}² при делении на ${a}?`,'0','Любое целое число, делящееся само на себя, даёт остаток 0.',String(b),String(a-1),String(a%3))}
+ if(L===8){a=quizInt(2,12);b=quizInt(2,12);n=quizInt(2,8);return quizMake(`Производная функции f(x) = ${a}x² + ${b} равна…`,`${2*a}x`,'По правилу степеней производная x² равна 2x, а производная константы равна нулю.',`${a}x`,`${2*a}x+${b}`,`${a}x²`)}
+ if(L===9){a=quizInt(2,10);b=quizInt(2,10);n=quizInt(2,8);return quizMake(`Вычисли определённый интеграл ∫₀^${n} ${a}x dx.`,String(a*n*n/2),`Первообразная ${a}x — это ${a}x²/2; подставь границы 0 и ${n}.`,String(a*n),String(a*n*n),String(a*n*n/2+a))}
+ if(L===10){a=quizInt(2,9);b=quizInt(2,9);n=quizInt(2,9);return quizMake(`Для матрицы [[${a},0],[0,${b}]] чему равен определитель?`,a*b,'Определитель диагональной матрицы равен произведению диагональных элементов.',a+b,a*b+a,a*b-b)}
+ if(L===11){a=quizInt(2,20);b=quizInt(2,20);n=quizInt(2,10);return quizMake(`В кольце остатков по модулю ${n+1}, чему равен (${a} + ${b}) mod ${n+1}?`,(a+b)%(n+1),'Сложи числа и найди остаток при делении на указанный модуль.',(a+b+1)%(n+1),(a*b)%(n+1),(a+b+2)%(n+1))}
+ // Level 12 and beyond: number theory, proof ideas, and Fermat's Last Theorem.
+ const variants=[
+  ()=>quizMake('Что утверждает Великая теорема Ферма для целых положительных x, y, z и n > 2?','Уравнение xⁿ + yⁿ = zⁿ не имеет таких решений','Теорема Ферма утверждает отсутствие положительных целых решений при целом показателе n больше 2.',['Такие решения есть для любого n','Решения возможны только при n=3','Она относится только к простым числам']),
+  ()=>quizMake('Для какого показателя уравнение xⁿ + yⁿ = zⁿ исключается Великой теоремой Ферма?','Для каждого целого n > 2','Теорема охватывает все целые показатели больше двух.',['Только для n=2','Только для n=3','Только для чётных n']),
+  ()=>quizMake('Кто доказал Великую теорему Ферма в 1994 году?','Эндрю Уайлс','Эндрю Уайлс представил доказательство, завершив многовековую историю задачи.',['Пьер Ферма','Карл Фридрих Гаусс','Исаак Ньютон']),
+  ()=>quizMake('Почему случай n = 2 не противоречит Великой теореме Ферма?','Теорема касается только n > 2','При n=2 существуют целые решения, например 3² + 4² = 5².',['Потому что квадратов не существует','Потому что n должно быть нечётным','Потому что z может быть нулём']),
+  ()=>quizMake('Какой пример показывает, что при n = 2 уравнение xⁿ + yⁿ = zⁿ имеет положительное целое решение?','3² + 4² = 5²','9 + 16 = 25, поэтому это решение для показателя 2.',['2³ + 3³ = 4³','1² + 1² = 3²','5² + 6² = 12²']),
+  ()=>quizMake('В чём главная сложность доказательства Великой теоремы Ферма?','Нужно доказать утверждение сразу для всех целых n > 2','Проверить отдельные значения n недостаточно: нужен общий математический аргумент.',['Достаточно проверить n от 3 до 10','Нужно измерить стороны треугольника','Теорема верна только для очень больших чисел'])
+ ];
+ return variants[quizInt(0,variants.length-1)]();
+}
+function isPrimeQuiz(x){if(x<2)return false;for(let i=2;i*i<=x;i++)if(x%i===0)return false;return true}
+
+const QUIZ_ROUNDS=5,QUIZ_QUESTIONS=10,QUIZ_POINTS=100;
+const QUIZ_MISTAKE_LIMIT=[5,4,3,2,1];
+const QUIZ_ROUND_NAMES=['Разминка','Сообразительность','Эксперт','Мастер','Легенда'];
+let quizRound=1,quizRoundIndex=0,quizScoringEligible=false,quizRoundPassed=false,quizSelectedRound=1;
+let quizRoundResults=0,quizRoundWins=0;
+let quizProgressStore={};
+try{quizProgressStore=JSON.parse(localStorage.getItem('mazeQuizTournament_v1')||'{}')||{}}catch(e){quizProgressStore={}}
+function quizTopicState(topic){
+ if(!quizProgressStore[topic])quizProgressStore[topic]={unlocked:1,attempted:[],passed:[]};
+ const st=quizProgressStore[topic];
+ st.unlocked=Math.max(1,Math.min(5,Number(st.unlocked)||1));
+ st.attempted=Array.isArray(st.attempted)?st.attempted:[];
+ st.passed=Array.isArray(st.passed)?st.passed:[];
+ return st;
+}
+function saveQuizTournament(){try{localStorage.setItem('mazeQuizTournament_v1',JSON.stringify(quizProgressStore));localStorage.setItem('mazeQuizBestStreak_v1',String(quizBestStreak));localStorage.setItem('mazeQuizRounds_v1',String(quizRounds))}catch(e){}}
+function quizDifficultyForRound(round){return ['Базовый','Средний','Сложный','Очень сложный','Экспертный'][round-1]}
+function quizMistakeLimit(){return QUIZ_MISTAKE_LIMIT[quizRound-1]}
+function quizRenderRounds(){
+ const list=$('quizRoundsList'),st=quizTopicState(quizTopic);list.innerHTML='';
+ for(let r=1;r<=QUIZ_ROUNDS;r++){
+  const btn=document.createElement('button');btn.type='button';
+  const locked=r>st.unlocked,passed=st.passed.includes(r);
+  btn.className='quiz-round'+(r===quizSelectedRound?' selected':'')+(passed?' done':'')+(locked?' locked':'');
+  btn.disabled=locked;
+  btn.innerHTML=`<strong>${passed?'✓':locked?'🔒':r}</strong><small>ТУР ${r}</small><small>${QUIZ_MISTAKE_LIMIT[r-1]} ошиб.</small>`;
+  btn.addEventListener('click',()=>{quizSelectedRound=r;quizRenderRounds();quizResetPanel('Тур '+r+' выбран. Нажми «Начать тур», чтобы начать.');});
+  list.appendChild(btn);
+ }
+ $('quizRoundNote').textContent=`Тур ${quizSelectedRound}: 10 вопросов · лимит ошибок ${QUIZ_MISTAKE_LIMIT[quizSelectedRound-1]} · ${quizDifficultyForRound(quizSelectedRound)} сложность.`;
+}
+function showMode(mode){activeMode=mode;$('mazeScreen').classList.toggle('hidden',mode!=='maze');$('dodgeScreen').classList.toggle('hidden',mode!=='dodge');$('quizScreen').classList.toggle('hidden',mode!=='quiz');$('mazeTab').classList.toggle('active',mode==='maze');$('dodgeTab').classList.toggle('active',mode==='dodge');$('quizTab').classList.toggle('active',mode==='quiz');if(mode==='maze')drawMaze();else if(mode==='dodge')resizeDodge();else{quizRenderRounds();updateQuizStats()}}
+$('quizTab').addEventListener('click',()=>showMode('quiz'));
+$('quizTopics').querySelectorAll('[data-topic]').forEach(btn=>btn.addEventListener('click',()=>{
+ quizTopic=btn.dataset.topic;quizSelectedRound=quizTopicState(quizTopic).unlocked;
+ $('quizTopics').querySelectorAll('[data-topic]').forEach(b=>b.classList.toggle('selected',b===btn));
+ quizRenderRounds();quizResetPanel('Тема выбрана. Выбери доступный тур и начинай!');
+ quizSay('Отличный выбор! Пройди все пять туров, если сможешь.');
+}));
+function updateQuizStats(){
+ $('quizCorrect').textContent=quizCorrect;
+ $('quizPoints').textContent=quizRoundPoints;
+ $('quizBestStreak').textContent=quizBestStreak;
+ $('quizRounds').textContent=quizRounds;
+ $('quizQuestionCount').textContent=Math.min(10,quizIndex+1)+'/10';
+ $('quizMistakeCount').textContent=quizMistakes+'/'+quizMistakeLimit();
+ $('quizProgressFill').style.width=Math.min(100,(quizRoundIndex+(quizAnswered?1:0))*10)+'%';
+ const lives=$('quizLives');lives.innerHTML='';
+ for(let i=0;i<quizMistakeLimit();i++){const x=document.createElement('span');x.textContent='×';if(i<quizMistakes)x.className='used';lives.appendChild(x)}
+ $('quizDifficulty').textContent='Сложность: '+quizDifficultyForRound(quizRound);
+}
+function quizSay(msg){$('quizSpeech').textContent=msg}
+function quizResetPanel(msg){
+ quizDeck=[];quizIndex=0;quizAnswered=false;quizGameOver=false;quizMistakes=0;quizStreak=0;quizCorrect=0;quizRoundPoints=0;quizRoundIndex=0;quizRoundPassed=false;
+ $('quizProgress').textContent='Тур не начат';$('quizQuestion').textContent=msg||'Нажми «Начать тур», чтобы начать.';$('quizAnswers').innerHTML='';
+ $('quizFeedback').className='quiz-feedback';$('quizFeedback').textContent='Квиззи готов к игре.';
+ $('quizNext').textContent='Начать тур';$('quizNext').disabled=false;$('quizProgressFill').style.width='0%';updateQuizStats();
+}
+const quizAdvancedBanks={
+ logic:{
+  3:[
+   ['Продолжи ряд: 2, 6, 12, 20, 30, …','42','Разности равны 4, 6, 8, 10, затем 12.',['40','только 36','44']],
+   ['Все зоры — мипы. Ни один мип не является ланом. Может ли зор быть ланом?','Нет','Если каждый зор является мипом, а мипы не бывают ланами, пересечения нет.',['Да','Иногда','Недостаточно данных']],
+   ['У трёх коробок неверные этикетки: «яблоки», «груши», «смесь». Из какой коробки начать вытаскивать фрукт?','Из коробки «смесь»','Все этикетки неверны, поэтому коробка со смесью не содержит смесь.',['Из любой','Из «яблоки»','Из «груши»']],
+   ['Если вчера было за два дня до пятницы, какой сегодня день?','Четверг','Два дня до пятницы это среда; вчера была среда, значит сегодня четверг.',['Среда','Пятница','Суббота']],
+   ['У каждого из 5 людей разное число рукопожатий. Возможно ли это, если все пожали руки друг другу?','Нет','Числа рукопожатий в полной группе должны включать пару 0 и 4, поэтому не все могут быть разными.',['Да','Только если людей 6','Только если людей 4']],
+   ['Есть 8 одинаковых на вид шаров, один тяжелее. Сколько взвешиваний на весах с чашами достаточно гарантированно?','Два','Сначала 3 против 3, затем сравнить подходящую тройку или пару.',['Одно','Три','Четыре']]
+  ],
+  4:[
+   ['Есть 9 монет, одна легче остальных. Сколько взвешиваний минимум нужно, чтобы найти её?','Два','Раздели монеты на три группы по три: два взвешивания позволяют найти лёгкую.',['Одно','Три','Четыре']],
+   ['На острове каждый всегда лжёт или всегда говорит правду. Человек сказал: «Я лжец». Что можно заключить?','Такое заявление невозможно в этой модели','Правдивый не мог бы сказать, что он лжец, а лжец не мог бы правдиво заявить это.',['Он точно правдив','Он точно лжец','Он оба типа']],
+   ['Сколько раз цифра 9 встречается в записи чисел от 1 до 100?','20','Десятки дают 10 девяток и единицы ещё 10, число 99 учитывается в обеих позициях.',['10','19','21']],
+   ['У квадрата отрезали один угол прямым срезом. Сколько вершин стало?','5','Один угол исчезает, но на срезе возникают две новые вершины.',['3','4','6']],
+   ['Если A больше B, B больше C, а D меньше C, кто самый большой?','A','Из цепочки A>B>C>D следует, что A самый большой.',['B','C','D']],
+   ['Три выключателя в комнате, лампа в другой комнате. Войти к лампе можно один раз. Как определить нужный выключатель?','Использовать свет и тепло лампы','Включить один на время, выключить, включить второй и проверить свет и нагрев.',['Только угадывать','Нельзя определить','Включить все три']]
+  ],
+  5:[
+   ['Есть 100 дверей, все закрыты. На проходе k меняют состояние каждой k-й двери. Какие двери останутся открыты?','Двери с номерами-квадратами','Только квадраты имеют нечётное число делителей.',['Все нечётные','Все простые','Только чётные']],
+   ['В комнате 10 человек. Каждый пожал руку каждому ровно один раз. Сколько рукопожатий?','45','Количество пар: 10×9/2 = 45.',['90','50','40']],
+   ['Какое наименьшее положительное число делится без остатка на 1, 2, 3, 4, 5 и 6?','60','Это наименьшее общее кратное чисел от 1 до 6.',['30','120','12']],
+   ['Утверждение «если P, то Q» ложно в каком случае?','P истинно, Q ложно','Импликация ложна только при истинной предпосылке и ложном следствии.',['P и Q истинны','P ложно, Q истинно','Оба ложны']],
+   ['Сколько диагоналей у выпуклого шестиугольника?','9','Формула n(n−3)/2 даёт 6×3/2 = 9.',['6','12','15']],
+   ['Если все A являются B, а некоторые B являются C, обязательно ли некоторые A являются C?','Нет','Пересечение B и C может не включать ни одного элемента A.',['Да, всегда','Только при трёх множествах','Да, если A не пусто']]
+  ]
+ },
+ facts:{
+  3:[
+   ['Какой договор завершил Первую мировую войну между Германией и союзниками?','Версальский договор','Он был подписан в 1919 году.',['Вестфальский мир','Тордесильясский договор','Маастрихтский договор']],
+   ['Какой элемент имеет химический символ W?','Вольфрам','Символ W происходит от названия wolfram.',['Ванадий','Водород','Висмут']],
+   ['Какая цивилизация построила Мачу-Пикчу?','Инки','Город-крепость находится в Андах и связан с цивилизацией инков.',['Майя','Ацтеки','Римляне']],
+   ['Какой слой атмосферы содержит большую часть озонового слоя?','Стратосфера','Озоновый слой расположен преимущественно в стратосфере.',['Тропосфера','Мезосфера','Экзосфера']],
+   ['Какой учёный сформулировал три закона движения и закон всемирного тяготения?','Исаак Ньютон','Его работы стали основой классической механики.',['Альберт Эйнштейн','Нильс Бор','Майкл Фарадей']],
+   ['Как называется граница, за которой ничто, даже свет, не может покинуть чёрную дыру?','Горизонт событий','Это граница причинной невозвратности для внешнего наблюдателя.',['Солнечный ветер','Сингулярная орбита','Фотосфера']]
+  ],
+  4:[
+   ['Какой процесс объясняет движение континентов в современной геологии?','Тектоника литосферных плит','Литосферные плиты движутся относительно друг друга.',['Конвекция океанов','Эрозия атмосферы','Магнитная инверсия']],
+   ['Какой математик связан с теоремами о неполноте?','Курт Гёдель','Его теоремы показывают ограничения формальных систем.',['Эвклид','Пифагор','Блез Паскаль']],
+   ['Что измеряет постоянная Хаббла в космологии?','Темп расширения Вселенной','Она связывает скорость удаления галактик с расстоянием в космологических масштабах.',['Возраст Земли напрямую','Массу Солнца','Скорость звука в вакууме']],
+   ['Как называется переход вещества прямо из твёрдого состояния в газ?','Сублимация','Примером служит переход сухого льда в газообразный CO₂.',['Конденсация','Плавление','Десублимация']],
+   ['Какой органоид клетки имеет собственную ДНК и участвует в производстве АТФ?','Митохондрия','Митохондрии участвуют в клеточном дыхании.',['Рибосома','Лизосома','Аппарат Гольджи']],
+   ['Что такое эффект Доплера?','Изменение наблюдаемой частоты при относительном движении','Он проявляется, например, в изменении тона сирены при проезде.',['Расщепление света призмой','Отражение звука','Преобразование массы в энергию']]
+  ],
+  5:[
+   ['Какая частица переносит электромагнитное взаимодействие в квантовой теории поля?','Фотон','Фотон является квантом электромагнитного поля.',['Глюон','Нейтрино','Гравитон, экспериментально подтверждённый']],
+   ['Как называется гипотеза, что квантовые состояния могут быть наложением нескольких состояний?','Суперпозиция','Квантовая суперпозиция допускает сочетание возможных состояний до измерения.',['Дифракция','Ионизация','Конвекция']],
+   ['Какой закон утверждает сохранение энтропии или её рост в изолированной системе?','Второй закон термодинамики','Энтропия изолированной системы не убывает.',['Закон Ома','Первый закон Ньютона','Закон Кулона']],
+   ['Какой тип доказательства опровергает утверждение одним контрпримером?','Доказательство от противного через контрпример','Одного допустимого контрпримера достаточно для опровержения всеобщего утверждения.',['Индукция','Прямое доказательство','Численное приближение']],
+   ['Что означает, что алгоритм работает за O(n log n)?','Его асимптотическое время растёт примерно как n log n','Это обозначение порядка роста вычислительных затрат.',['Всегда ровно n операций','Память всегда O(1)','Алгоритм экспоненциальный']],
+   ['Какой эксперимент исторически показал интерференцию электронов?','Эксперимент Дэвиссона — Джермера','Он подтвердил волновые свойства электронов через дифракцию на кристалле.',['Опыт Милликена с маслом','Опыт Кавендиша с маятником','Опыт Галилея на башне']]
+  ]
+ },
+ games:{
+  3:[
+   ['В Minecraft какой инструмент обычно нужен для добычи обсидиана?','Алмазная или незеритовая кирка','Другие кирки не позволяют получить блок обсидиана как предмет.',['Деревянная кирка','Каменная кирка','Золотая кирка']],
+   ['В Brawl Stars что обычно означает «контроль зоны»?','Удерживать область карты и не пускать противников','Тактика строится вокруг контроля территории.',['Собирать только монеты','Выбирать скин','Уходить с карты']],
+   ['В Roblox Studio на каком языке обычно пишут игровые скрипты?','Luau','Luau является языком скриптов Roblox, основанным на Lua.',['Python','C#','Java']],
+   ['Как называется редкость предмета выше обычной в типичной системе лута?','Необычная','В распространённой шкале после обычной идёт необычная.',['Сломанная','Нулевая','Пустая']],
+   ['В Terraria какой босс обычно считается первым крупным испытанием в обычном прогрессе?','Глаз Ктулху','Его часто побеждают на раннем этапе игры.',['Лунный Лорд','Королева слизней','Императрица света']],
+   ['В Pokémon какой тип обычно эффективен против водного типа?','Электрический','Электрические атаки эффективны против водных покемонов.',['Огненный','Земляной','Ледяной']]
+  ],
+  4:[
+   ['В шахматах какая фигура может перепрыгивать через другие фигуры?','Конь','Ход коня имеет форму буквы «Г» и допускает перепрыгивание.',['Слон','Ладья','Ферзь']],
+   ['Какой жанр сочетает исследование, развитие персонажа и случайно генерируемые попытки?','Roguelite','Для roguelite типичны повторные забеги и постепенное развитие.',['Симулятор полёта','Графический редактор','Визуальная новелла обязательно']],
+   ['В сетевых играх что означает высокий ping?','Большую задержку обмена данными','Высокий пинг может приводить к запаздыванию действий.',['Более высокий FPS','Лучшее разрешение','Большой объём памяти']],
+   ['Какой принцип лежит в основе speedrun?','Пройти игру как можно быстрее по заданным правилам','Игроки оптимизируют маршрут и действия, соблюдая категорию забега.',['Собрать все предметы обязательно','Играть только без звука','Не использовать сохранения никогда']],
+   ['Что обычно делает сервер авторитетным в сетевой игре?','Он подтверждает ключевое состояние игрового мира','Это помогает согласовывать состояние и ограничивать часть читов.',['Он рисует все пиксели на экране','Он заменяет интернет','Он управляет яркостью']],
+   ['Как называется баланс, когда несколько стратегий остаются жизнеспособными?','Стратегическое разнообразие','Разные подходы могут быть эффективны без единственного доминирующего выбора.',['Жёсткий лок','Случайный спавн','Технический долг']]
+  ],
+  5:[
+   ['Как называется метод сглаживания изображения, использующий выборку нескольких субпиксельных точек?','Суперсэмплинг','Избыточная выборка помогает уменьшить ступенчатые края.',['Тесселяция','Окклюзия','Сжатие без потерь']],
+   ['Какой алгоритм поиска пути часто используется в играх благодаря эвристике?','A*','A* сочетает стоимость пути и эвристическую оценку до цели.',['Bubble sort','RSA','Бинарный поиск всегда']],
+   ['В игровых движках что обычно означает ECS?','Entity Component System','Архитектура разделяет сущности, компоненты данных и системы логики.',['Enhanced Camera Shader','External Cloud Save','Engine Collision Sound']],
+   ['Что означает rollback netcode в файтингах?','Откат симуляции при позднем получении ввода','Симуляция пересчитывается, чтобы компенсировать задержку сети.',['Автоматическое сохранение скриншотов','Снижение разрешения','Перезапуск матча при каждом ударе']],
+   ['Что такое процедурная генерация контента?','Создание уровней или объектов по алгоритмическим правилам','Контент частично строится алгоритмом вместо ручного создания каждого элемента.',['Запись каждого уровня вручную','Сжатие аудио','Синхронизация контроллера']],
+   ['Для чего в 3D-графике используют z-buffer?','Для определения видимости поверхностей по глубине','Буфер глубины помогает решать, какие поверхности ближе к камере.',['Для хранения звука','Для подсчёта очков','Для управления сетью']]
+  ]
+ }
+};
+const quizFixedSupplement = {
+logic:[["Продолжи ряд: 1, 4, 9, 16, 25, …","36","Это квадраты чисел от 1 до 6.",["30","35","49"]],["У Маши братьев столько же, сколько сестёр. У её брата сестёр вдвое больше, чем братьев. Сколько детей в семье?","4 девочки и 3 мальчика","У девочки 3 сестры и 3 брата; у мальчика 4 сестры и 2 брата.",["3 девочки и 2 мальчика","2 девочки и 2 мальчика","5 девочек и 4 мальчика"]],["Если все блупы красные, а этот предмет не красный, может ли он быть блупом?","Нет","По условию любой блуп обязательно красный.",["Да","Только ночью","Недостаточно данных"]],["У часов 3:15. Какой меньший угол примерно между стрелками?","7,5°","Минутная стрелка на 90°, часовая уже сместилась на 7,5° от отметки 3.",["0°","15°","30°"]],["В забеге ты обогнал человека, который бежал вторым. Каким ты стал?","Вторым","Ты занял его место, а не первое.",["Первым","Третьим","Последним"]],["Есть три выключателя и одна лампа в другой комнате. Как определить нужный выключатель, зайдя в комнату только один раз?","Использовать тепло лампы вместе со светом","Включить первый, подождать, выключить; включить второй и проверить свет и тепло.",["Нажать все три","Невозможно даже теоретически","Посчитать щелчки"]],["У двух монет сумма 30 тенге, одна из них не 10 тенге. Какие это монеты?","20 и 10 тенге","Одна монета не 10, но другая вполне может быть 10.",["15 и 15 тенге","25 и 5 тенге","Только две по 20"]],["Как получить число 100, используя четыре девятки и арифметические знаки?","99 + 9/9","99 + 1 = 100.",["9×9+9","999−9","9+9+9+9"]],["В комнате 10 человек, каждый пожал руку каждому один раз. Сколько рукопожатий?","45","Количество пар: 10×9÷2.",["90","50","100"]],["Что тяжелее: килограмм железа или килограмм ваты?","Одинаково","Оба весят один килограмм.",["Железо","Вата","Зависит от размера"]],["Если позавчера был понедельник, какой день будет завтра?","Пятница","Позавчера понедельник, сегодня среда, завтра четверг.",["Четверг","Среда","Суббота"]],["На столе 5 яблок. Ты взял 2. Сколько яблок у тебя?","2","Ты взял именно два яблока.",["3","5","0"]],["Какое число лишнее: 2, 3, 5, 7, 9, 11?","9","Остальные числа простые, а 9 делится на 3.",["2","7","11"]],["У квадрата отрезали один угол прямой линией. Сколько углов у получившейся фигуры?","5","Один угол заменился двумя новыми.",["3","4","6"]],["Продолжи ряд: 1, 1, 2, 3, 5, 8, …","13","Каждое число равно сумме двух предыдущих.",["11","12","16"]],["Если A больше B, а B больше C, кто самый маленький?","C","Из цепочки A > B > C следует, что C меньше остальных.",["A","B","Нельзя определить"]],["Сколько раз можно вычесть 5 из 25?","Один раз","После первого вычитания это уже 20, а не 25.",["Пять раз","Четыре раза","Ноль раз"]],["У фермера было 17 овец, все кроме 9 убежали. Сколько осталось?","9","Фраза «все кроме 9» означает, что девять остались.",["8","17","0"]],["Что следует из фразы «некоторые книги интересны»?","Не все книги обязательно интересны","Слово «некоторые» не означает «все».",["Все книги интересны","Ни одна книга не интересна","Все книги одинаковы"]],["Продолжи ряд: 3, 6, 12, 24, …","48","Каждое число удваивается.",["36","42","30"]]],
+facts:[["Какой орган качает кровь по телу?","Сердце","Сердце перекачивает кровь по кровеносной системе.",["Лёгкие","Печень","Желудок"]],["Как называется самая большая планета Солнечной системы?","Юпитер","Юпитер крупнейший по диаметру и массе среди планет.",["Сатурн","Земля","Нептун"]],["Какой материк самый маленький по площади?","Австралия","Австралия считается самым маленьким материком.",["Европа","Антарктида","Южная Америка"]],["Как называется процесс превращения воды в пар?","Испарение","При испарении жидкость переходит в газообразное состояние.",["Конденсация","Замерзание","Плавление"]],["Кто написал пьесу «Гамлет»?","Уильям Шекспир","«Гамлет» является трагедией английского драматурга.",["Чарльз Диккенс","Марк Твен","Джордж Оруэлл"]],["Какой металл обозначается символом Fe?","Железо","Fe происходит от латинского названия ferrum.",["Фтор","Фосфор","Медь"]],["Сколько сторон у шестиугольника?","6","Приставка «шести-» указывает на шесть сторон.",["5","7","8"]],["Как называется столица Японии?","Токио","Токио является столицей Японии.",["Киото","Осака","Нагоя"]],["Какой газ необходим человеку для клеточного дыхания?","Кислород","Клетки используют кислород в аэробном дыхании.",["Гелий","Азот","Метан"]],["Кто был первым человеком в космосе?","Юрий Гагарин","Он совершил полёт 12 апреля 1961 года.",["Нил Армстронг","Алексей Леонов","Алан Шепард"]],["Как называется наука о землетрясениях?","Сейсмология","Сейсмология изучает землетрясения и сейсмические волны.",["Экология","Метеорология","Астрономия"]],["Какой язык является основным официальным языком Бразилии?","Португальский","Бразилия была колонией Португалии.",["Испанский","Французский","Английский"]],["Как называется ближайшая к Земле звезда?","Солнце","Солнце является звездой нашей планетной системы.",["Сириус","Проксима Центавра","Полярная звезда"]],["Какой витамин организм может синтезировать под действием солнечного света?","Витамин D","В коже под воздействием ультрафиолета образуется витамин D.",["Витамин C","Витамин B12","Витамин K"]],["Какой прибор измеряет атмосферное давление?","Барометр","Барометр используют для измерения атмосферного давления.",["Термометр","Гигрометр","Анемометр"]],["Как называется самая длинная река Африки?","Нил","Нил традиционно считается самой длинной рекой Африки.",["Конго","Замбези","Нигер"]],["Какой химический символ у золота?","Au","Обозначение Au происходит от латинского aurum.",["Ag","Go","Gd"]],["В каком городе находится Колизей?","Рим","Колизей является древнеримским амфитеатром.",["Афины","Париж","Стамбул"]],["Как называется переход твёрдого вещества сразу в газ?","Сублимация","При сублимации жидкая фаза пропускается.",["Конденсация","Кристаллизация","Плавление"]],["Какое море является самым солёным среди крупных открытых водоёмов?","Красное море","Красное море отличается высокой солёностью среди морей открытого типа.",["Балтийское море","Чёрное море","Азовское море"]]],
+games:[["Какая компания создала серию The Legend of Zelda?","Nintendo","Основная серия Zelda выпускается Nintendo.",["Sega","Valve","Ubisoft"]],["Как зовут главного героя серии God of War?","Кратос","Кратос является центральным персонажем серии.",["Атрей","Данте","Рю"]],["В какой игре строят из блоков и добывают ресурсы в открытом мире?","Minecraft","Minecraft основана на добыче ресурсов, строительстве и исследовании.",["Terraria","Fortnite","Roblox"]],["Как называется игровая роль, которая обычно лечит союзников?","Поддержка","Персонажи поддержки помогают команде лечением и усилениями.",["Танк","Снайпер","Босс"]],["Что означает PvP?","Игрок против игрока","PvP расшифровывается как Player versus Player.",["Игрок против окружения","Пауза перед победой","Партия против партии"]],["Как называется жанр игр с исследованием мира и развитием персонажа?","RPG","В RPG важны развитие героя, характеристики и сюжетные решения.",["Гонки","Пинбол","Ритм-игра"]],["Как зовут принцессу, которую часто спасает Марио?","Принцесса Пич","Пич является ключевым персонажем серии Super Mario.",["Зельда","Самус","Клэр"]],["Какая компания выпускает PlayStation?","Sony","PlayStation является игровой платформой Sony.",["Microsoft","Nintendo","Sega"]],["Как называется игровая механика, при которой предметы выпадают случайно?","Лут-дроп","Loot drop означает случайное получение предметов или наград.",["Быстрое сохранение","Парирование","Телепортация"]],["В какой игре известен режим Battle Royale с островом и строительством?","Fortnite","Fortnite известна режимом королевской битвы и строительством.",["Portal","Stardew Valley","The Sims"]],["Как зовут героя серии Halo?","Мастер Чиф","Master Chief является главным героем основной серии Halo.",["Командир Шепард","Гордон Фримен","Сэмус Аран"]],["Как называется показатель кадров в секунду?","FPS","FPS показывает количество отображаемых кадров за секунду.",["DPI","RAM","NPC"]],["Что обычно делает танк в командной игре?","Принимает урон и защищает союзников","Танк обладает выживаемостью и помогает удерживать внимание противников.",["Только лечит","Строит карту","Управляет музыкой"]],["Какая игра связана с ловлей и тренировкой покемонов?","Pokémon","Игроки ловят, собирают и тренируют покемонов.",["Digimon World","Monster Hunter","Animal Crossing"]],["Как называется персонаж, которым управляет компьютер, а не игрок?","NPC","NPC означает non-player character.",["DLC","HUD","FPS"]],["Как называется дополнительный загружаемый контент для игры?","DLC","DLC расшифровывается как downloadable content.",["NPC","CPU","PvP"]],["В какой серии игр игроки исследуют постапокалиптические Пустоши?","Fallout","Fallout известна постапокалиптическим миром и ролевыми элементами.",["Animal Crossing","Forza Horizon","Splatoon"]],["Как называется интерфейс с полосой здоровья и картой?","HUD","HUD показывает важную игровую информацию поверх изображения.",["SDK","LAN","DLC"]],["Какой жанр обычно требует точного времени нажатия под музыку?","Ритм-игра","В ритм-играх действия синхронизируют с музыкальным ритмом.",["Стратегия","Симулятор фермы","Песочница"]],["Что означает «speedrun»?","Прохождение игры на скорость","Спидраннер стремится завершить игру как можно быстрее по заданным правилам.",["Игра без звука","Сбор всех предметов обязательно","Игра на максимальной графике"]]],
+math:[["Сколько будет 18 + 27?","45","Сложи десятки и единицы.",["44","46","55"]],["Вычисли: 9 × 7.","63","Таблица умножения.",["56","72","67"]],["Чему равно 144 ÷ 12?","12","12 × 12 = 144.",["10","11","14"]],["Найди 15% от 200.","30","10% это 20, 5% это 10.",["15","25","35"]],["Чему равно 3² + 4²?","25","9 + 16 = 25.",["24","49","12"]],["Продолжи ряд: 5, 10, 20, 40, …","80","Каждый раз умножаем на 2.",["60","70","100"]],["Сколько градусов в прямом угле?","90","Прямой угол равен 90°.",["45","180","360"]],["Упростить: 7x + 2x.","9x","Складываем подобные слагаемые.",["14x","9x²","5x"]],["Чему равно 2³?","8","2 × 2 × 2 = 8.",["6","9","12"]],["Найди периметр квадрата со стороной 6.","24","Периметр квадрата равен 4a.",["12","18","36"]],["Реши: 3x = 27.","9","Раздели обе части на 3.",["8","7","6"]],["Чему равна дробь 3/4 в процентах?","75%","3/4 = 0,75.",["25%","50%","80%"]],["Вычисли: 2⁵ × 2².","128","При умножении степеней складываем показатели: 2⁷.",["64","32","256"]],["Реши: x + 17 = 42.","25","42 − 17 = 25.",["24","26","59"]],["Чему равна площадь прямоугольника 8 на 5?","40","Площадь равна длине, умноженной на ширину.",["13","26","80"]],["Вычисли: (36 − 12) ÷ 6.","4","Сначала скобки: 24 ÷ 6.",["2","6","8"]],["Какое число простое?","29","У 29 нет делителей кроме 1 и самого себя.",["21","27","33"]],["Найди среднее арифметическое 4, 8 и 12.","8","(4 + 8 + 12) ÷ 3 = 8.",["6","9","12"]],["Реши: 5x − 10 = 15.","5","5x = 25, значит x = 5.",["3","4","7"]],["Чему равен квадрат числа 13?","169","13 × 13 = 169.",["156","144","196"]],["Разложи x² − 25 на множители.","(x − 5)(x + 5)","Это разность квадратов.",["(x−5)²","(x+25)(x−1)","x(x−25)"]],["Если 2x + 7 = 31, чему равен x?","12","2x = 24.",["10","14","19"]],["Чему равна сумма углов треугольника?","180°","В евклидовой геометрии сумма внутренних углов треугольника равна 180°.",["90°","270°","360°"]],["Вычисли: (a²b)(3ab²).","3a³b³","При умножении степеней с одинаковой основой показатели складываются.",["3a²b²","3a³b²","a³b³"]],["Реши: x² = 81 для положительного x.","9","Положительный квадратный корень из 81 равен 9.",["8","−9","18"]],["Чему равен наклон прямой y = 4x − 2?","4","Коэффициент при x задаёт наклон.",["−2","2","−4"]],["Вычисли 2/3 + 1/6.","5/6","2/3 = 4/6, затем 4/6 + 1/6.",["3/9","1/2","1"]],["Чему равна площадь круга радиуса 3?","9π","Площадь круга равна πr².",["6π","3π","12π"]],["Реши систему: x + y = 10, x − y = 2. Чему равен x?","6","Сложи уравнения: 2x = 12.",["4","5","8"]],["Чему равен НОД чисел 36 и 48?","12","12 является наибольшим общим делителем.",["6","8","18"]],["Если f(x) = 2x², чему равно f(3)?","18","2 × 3² = 18.",["12","36","9"]],["Какова производная функции f(x) = x³?","3x²","По правилу степеней производная xⁿ равна nxⁿ⁻¹.",["x²","3x","x⁴"]],["Реши: x² − 5x + 6 = 0.","x = 2 или x = 3","Произведение 6, сумма корней 5.",["x = 1 или 6","x = −2 или −3","x = 0 или 6"]],["Чему равен определитель матрицы [[2,1],[3,4]]?","5","2×4 − 1×3 = 5.",["11","8","−5"]],["Вычисли log₁₀(1000).","3","10³ = 1000.",["2","10","100"]],["Чему равен cos(0°)?","1","Косинус нулевого угла равен 1.",["0","−1","1/2"]],["Если a:b = 3:5 и a = 12, чему равно b?","20","Множитель равен 4, поэтому b = 5×4.",["15","18","24"]],["Найди сумму первых 10 натуральных чисел.","55","Формула n(n+1)/2.",["45","50","60"]],["Реши: 2ˣ = 32.","5","32 = 2⁵.",["4","6","8"]],["Чему равна сумма внутренних углов пятиугольника?","540°","Формула (n−2)×180°.",["360°","720°","900°"]],["Какова производная sin(x)?","cos(x)","Это стандартное правило дифференцирования.",["−cos(x)","−sin(x)","tan(x)"]],["Чему равен интеграл ∫ 2x dx?","x² + C","Первообразная 2x равна x², добавляется константа.",["2x² + C","x + C","x²/2 + C"]],["Какой остаток даёт 7² при делении на 5?","4","49 = 45 + 4.",["1","2","3"]],["Какое из чисел является простым?","97","97 делится только на 1 и 97.",["91","93","99"]],["Что утверждает Великая теорема Ферма при n > 2?","Нет положительных целых решений xⁿ + yⁿ = zⁿ","Теорема исключает такие решения для целого n больше 2.",["Решения есть для любого n","Верно только при n=3","Относится только к чётным n"]],["Чему равен предел lim(x→0) sin(x)/x?","1","Это один из основных замечательных пределов.",["0","∞","−1"]],["Каков определитель матрицы [[1,2],[2,4]]?","0","Строки линейно зависимы, а 1×4 − 2×2 = 0.",["2","4","−4"]],["Если P(A)=0,25, чему равна вероятность противоположного события?","0,75","Вероятность дополнения равна 1 − P(A).",["0,25","0,5","1"]],["Чему равен НОД чисел 252 и 105?","21","252 = 12×21, 105 = 5×21.",["7","14","35"]],["Какой показатель n делает 2ⁿ = 1024?","10","2¹⁰ = 1024.",["8","9","12"]]]
+};
+function quizPrepareDeck(){
+ const topic=quizTopic;
+ let block=[];
+ if(topic==='math'){
+  const pool=quizFixedSupplement.math;
+  block=pool.slice((quizRound-1)*QUIZ_QUESTIONS,quizRound*QUIZ_QUESTIONS);
+ }else{
+  const base=(quizTopicBanks[topic]||quizTopicBanks.logic).slice();
+  const advanced=quizAdvancedBanks[topic]||{};
+  const extra=quizFixedSupplement[topic]||[];
+  if(quizRound===1) block=base.slice(0,10);
+  else if(quizRound===2) block=base.slice(10,12).concat(extra.slice(0,8));
+  else if(quizRound===3) block=(advanced[3]||[]).concat(extra.slice(8,12));
+  else if(quizRound===4) block=(advanced[4]||[]).concat(extra.slice(12,16));
+  else block=(advanced[5]||[]).concat(extra.slice(16,20));
+ }
+ // All 200 questions are written into this file in advance; only their order within a round is shuffled.
+ quizDeck=quizShuffle(block.map(entry=>quizMake(entry[0],entry[1],entry[2],entry[3])));
+ quizIndex=0;
+}
+function startQuiz(){
+ const st=quizTopicState(quizTopic);quizRound=quizSelectedRound;
+ if(quizRound>st.unlocked){quizSay('Сначала пройди предыдущий тур.');return}
+ quizScoringEligible=!st.attempted.includes(quizRound);
+ if(quizScoringEligible){st.attempted.push(quizRound);saveQuizTournament()}
+ quizCorrect=0;quizStreak=0;quizRoundPoints=0;quizMistakes=0;quizGameOver=false;quizAnswered=false;quizQuestionNumber=0;quizRoundIndex=0;quizRoundPassed=false;
+ quizPrepareDeck();$('quizNext').textContent='Следующий вопрос';$('quizNext').disabled=true;
+ quizSay(quizScoringEligible?'Первая попытка! За каждый правильный ответ получишь 100 очков.':'Это повторная попытка: очки за этот тур больше не начисляются.');
+ $('quizProgress').textContent=`Тур ${quizRound} из 5`;renderQuizQuestion();updateQuizStats();
+}
+function renderQuizQuestion(){
+ quizAnswered=false;const item=quizDeck[quizIndex];
+ $('quizProgress').textContent=`ТУР ${quizRound}/5 · ВОПРОС ${quizIndex+1}/10`;
+ $('quizQuestion').textContent=item.q;$('quizFeedback').className='quiz-feedback';$('quizFeedback').textContent='Выбери один правильный ответ.';
+ $('quizAnswers').innerHTML='';
+ item.a.forEach((answer,i)=>{const b=document.createElement('button');b.type='button';b.className='quiz-answer';b.textContent=String.fromCharCode(65+i)+'. '+answer;b.addEventListener('click',()=>answerQuiz(i));$('quizAnswers').appendChild(b)});
+ $('quizNext').textContent=quizIndex===9?'Завершить тур':'Следующий вопрос';$('quizNext').disabled=true;updateQuizStats();
+}
+function quizEndRound(passed){
+ quizGameOver=true;quizRoundPassed=passed;quizRounds++;quizRoundResults++;
+ const st=quizTopicState(quizTopic);
+ if(passed){if(!st.passed.includes(quizRound))st.passed.push(quizRound);st.unlocked=Math.max(st.unlocked,Math.min(5,quizRound+1));quizSay(quizRound===5?'Невероятно! Ты прошёл все пять туров!':'Тур пройден! Следующий тур становится сложнее.')}
+ else{quizSay('Тур не пройден. Попробуй ещё раз, но очки за повторную попытку не начисляются.')}
+ saveQuizTournament();updateHeader();updateQuizStats();quizRenderRounds();
+ $('quizQuestion').textContent=passed?(quizRound===5?'🏆 Турнир пройден!':'🎉 Тур пройден!'):'Попытка завершена';
+ $('quizAnswers').innerHTML='';$('quizNext').disabled=false;$('quizNext').textContent=passed?(quizRound===5?'Выбрать тему':'Следующий тур'):'Повторить тур';
+ $('quizFeedback').className='quiz-feedback '+(passed?'good':'bad');
+ $('quizFeedback').textContent=(passed?'Ты ответил правильно на '+quizCorrect+' из 10 вопросов. ':'Правильных ответов: '+quizCorrect+' из 10. ')+(quizScoringEligible?'Начислено за тур: '+quizRoundPoints+' очков.':'Повторная попытка: очки не начислялись.')+(passed&&quizRound===5?' Ты стал чемпионом Квиззи!':'');
+ $('quizProgressFill').style.width='100%';$('quizQuestionCount').textContent='10/10';$('quizRoundNote').textContent=passed?(quizRound===5?'Все пять туров пройдены! Выбери другую тему или сыграй снова.':'Тур пройден! Тур '+(quizRound+1)+' теперь доступен.'):'Тур не пройден. Можно попробовать ещё раз.';
+}
+function answerQuiz(choice){
+ if(quizAnswered||quizGameOver)return;quizAnswered=true;
+ const item=quizDeck[quizIndex],buttons=[...$('quizAnswers').querySelectorAll('button')];
+ buttons.forEach((b,i)=>{b.disabled=true;if(i===item.c)b.classList.add('correct');if(i===choice&&i!==item.c)b.classList.add('wrong')});
+ const right=choice===item.c;
+ if(right){
+  quizCorrect++;quizStreak++;quizBestStreak=Math.max(quizBestStreak,quizStreak);
+  if(quizScoringEligible){quizRoundPoints+=QUIZ_POINTS;save.points+=QUIZ_POINTS}
+  quizSay('Правильно! '+item.e);
+  $('quizFeedback').className='quiz-feedback good';
+  $('quizFeedback').textContent='✅ Верно! '+item.e+(quizScoringEligible?' +100 очков':' Повтор: без очков');
+ }else{
+  quizMistakes++;quizStreak=0;quizSay('Не совсем! '+item.e);
+  $('quizFeedback').className='quiz-feedback bad';
+  $('quizFeedback').textContent='❌ Ответ: '+item.a[item.c]+'. '+item.e+' Ошибки: '+quizMistakes+'/'+quizMistakeLimit()+'.';
+ }
+ persist();saveQuizTournament();updateQuizStats();
+ $('quizProgress').textContent=`ТУР ${quizRound}/5 · ВОПРОС ${quizIndex+1}/10 · ОШИБКИ ${quizMistakes}/${quizMistakeLimit()}`;
+ if(quizMistakes>=quizMistakeLimit()){quizEndRound(false);return}
+ $('quizNext').disabled=false;
+}
+function nextQuiz(){
+ if(quizGameOver){
+  if(quizRoundPassed&&quizRound<5){quizSelectedRound=Math.min(5,quizRound+1);quizRenderRounds();quizResetPanel('Следующий тур открыт! Нажми «Начать тур».');return}
+  if(quizRoundPassed&&quizRound===5){quizSelectedRound=1;quizRenderRounds();quizResetPanel('Чемпион! Можешь пройти турнир заново без повторного начисления очков.');return}
+  quizResetPanel('Тур выбран для повторной попытки. Нажми «Начать тур».');return;
+ }
+ if(!quizAnswered){$('quizFeedback').textContent='Сначала выбери вариант ответа.';return}
+ if(quizIndex>=9){quizEndRound(true);return}
+ quizIndex++;renderQuizQuestion();quizSay('Вперёд! Вопрос '+(quizIndex+1)+' из 10.');
+}
+$('quizNext').addEventListener('click',()=>{
+ if(!quizDeck.length||$('quizAnswers').children.length===0&&!quizGameOver){startQuiz();return}
+ if(quizGameOver){nextQuiz();return}
+ nextQuiz();
+});
+updateHeader();buildLevelButtons();startMaze();resizeDodge();resetDodge();quizRenderRounds();quizResetPanel('Выбери тему и доступный тур, затем нажми «Начать тур».');
+})();
+</script>
+</body>
+</html>
